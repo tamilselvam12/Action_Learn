@@ -21,7 +21,7 @@ jobs:
         deploymentName='MyDeployment'
         sed -i "s|{{.containerregistryname}}|${{ vars.CONTAINERREGISTER_NAME }}|" Container_Registry.json
         sed -i "s|{{.location}}|${{ vars.LOCATION_NAME }}|" Container_Registry.json   
-        cat ContainerRegistry.json
+        cat Container_Registry.json   
         az deployment group create --resource-group $(resource-group-name) --name $deploymentName --template-file Container_Registry.json
 
 
