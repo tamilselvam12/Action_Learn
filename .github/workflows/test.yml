@@ -9,7 +9,7 @@ on:
 jobs:
   Container_Registry:
     runs-on: ubuntu-latest
-    if: ${{ secrets.INFRA_STATUS_CONTAINER_REGISTER == 'yes' }}
+    if: ${{ vars.INFRA_STATUS_CONTAINER_REGISTER == 'yes' }}
 
     steps:
     - name: Checkout repository
