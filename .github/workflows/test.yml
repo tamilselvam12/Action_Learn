@@ -19,8 +19,8 @@ jobs:
         az login --service-principal -u ${{ secrets.SERVICE_PRINCIPAL_ID }} -p ${{ secrets.SERVICE_PRINCIPAL_KEY }} --tenant ${{ secrets.TENANT_ID }}
         ls
         deploymentName='MyDeployment'
-        sed -i "s|{{.containerregistryname}}|$(CONTAINERREGISTER_NAME)|" Container_Registry.json
-        sed -i "s|{{.location}}|$(LOCATION_NAME)|" Container_Registry.json   
+        sed -i "s|{{.containerregistryname}}|${{ vars.CONTAINERREGISTER_NAME }}|" Container_Registry.json
+        sed -i "s|{{.location}}|${{ vars.LOCATION_NAME }}|" Container_Registry.json   
         cat ContainerRegistry.json
         az deployment group create --resource-group $(resource-group-name) --name $deploymentName --template-file Container_Registry.json
 
