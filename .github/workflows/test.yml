@@ -18,6 +18,7 @@ jobs:
       run: | 
         az login --service-principal -u ${{ secrets.SERVICE_PRINCIPAL_ID }} -p ${{ secrets.SERVICE_PRINCIPAL_KEY }} --tenant ${{ secrets.TENANT_ID }}
         deploymentName='MyDeployment'
+        echo "a"
         sed -i "s|{{.containerregistryname}}|${{ vars.CONTAINERREGISTER_NAME }}|" Container_Registry.json
         sed -i "s|{{.location}}|${{ vars.LOCATION_NAME }}|" Container_Registry.json   
         cat Container_Registry.json   
