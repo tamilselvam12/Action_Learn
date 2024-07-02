@@ -15,4 +15,4 @@ jobs:
       uses: actions/checkout@v2
 
     - name: ContainerRegistry
-      run: echo ${{ secrets.CONTAINERREGISTER_NAME }}
+      run: echo ${{ variables.CONTAINERREGISTER_NAME }}
