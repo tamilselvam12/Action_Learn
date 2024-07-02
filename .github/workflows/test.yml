@@ -17,5 +17,8 @@ jobs:
     - name: Print ContainerRegistry Variable
       run: | 
         az login --service-principal -u ${{ secrets.SERVICE_PRINCIPAL_ID }} -p ${{ secrets.SERVICE_PRINCIPAL_KEY }} --tenant ${{ secrets.TENANT_ID }}
-        # echo ${{ vars.CONTAINERREGISTER_NAME }}
+        echo ${{ vars.CONTAINERREGISTER_NAME }}
+        echo ${{ vars.CONTAINERREGISTER_NAME }}
+        echo ${{ vars.CONTAINERREGISTER_NAME }}
+        echo ${{ vars.CONTAINERREGISTER_NAME }}
 
