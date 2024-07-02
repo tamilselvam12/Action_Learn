@@ -9,6 +9,7 @@ on:
 jobs:
   Container_Registry:
     runs-on: ubuntu-latest
+    if: ${{ secrets.INFRA_STATUS_CONTAINER_REGISTER == 'yes' }}
 
     steps:
     - name: Checkout repository
@@ -16,15 +17,10 @@ jobs:
 
     - name: Container_Registry_Install
       run: |
-        if [ "${{ vars.INFRA_STATUS_CONTAINER_REGISTER }}" == "yes" ]; then
-          az login --service-principal -u ${{ secrets.SERVICE_PRINCIPAL_ID }} -p ${{ secrets.SERVICE_PRINCIPAL_KEY }} --tenant ${{ secrets.TENANT_ID }}
-          deploymentName='MyDeployment'
-          echo "a"
-          sed -i "s|{{.containerregistryname}}|${{ vars.CONTAINERREGISTER_NAME }}|" Container_Registry.json
-          sed -i "s|{{.location}}|${{ vars.LOCATION_NAME }}|" Container_Registry.json   
-          cat Container_Registry.json   
-          az deployment group create --resource-group ${{ vars.RESOURCEGROUP_NAME }} --name $deploymentName --template-file Container_Registry.json
-        else
-          echo "INFRA_STATUS_CONTAINER_REGISTER is not 'yes'. Skipping..."
-        fi          
+        az login --service-principal -u ${{ secrets.SERVICE_PRINCIPAL_ID }} -p ${{ secrets.SERVICE_PRINCIPAL_KEY }} --tenant ${{ secrets.TENANT_ID }}
+        deploymentName='MyDeployment'
+        sed -i "s|{{.containerregistryname}}|${{ vars.CONTAINERREGISTER_NAME }}|" Container_Registry.json
+        sed -i "s|{{.location}}|${{ vars.LOCATION_NAME }}|" Container_Registry.json   
+        cat Container_Registry.json   
+        az deployment group create --resource-group ${{ vars.RESOURCEGROUP_NAME }} --name $deploymentName --template-file Container_Registry.json
 
