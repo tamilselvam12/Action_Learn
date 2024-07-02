@@ -3,21 +3,20 @@ name: ARM Template
 on:
   push:
     branches:
-      - main
+      - none
   workflow_dispatch:
 
 jobs:
-  say_hello:
+  Container_Registry:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Print ContainerRegistry Variable
+    - name: Container_Registry_Install
       run: | 
         az login --service-principal -u ${{ secrets.SERVICE_PRINCIPAL_ID }} -p ${{ secrets.SERVICE_PRINCIPAL_KEY }} --tenant ${{ secrets.TENANT_ID }}
-        ls
         deploymentName='MyDeployment'
         sed -i "s|{{.containerregistryname}}|${{ vars.CONTAINERREGISTER_NAME }}|" Container_Registry.json
         sed -i "s|{{.location}}|${{ vars.LOCATION_NAME }}|" Container_Registry.json   
