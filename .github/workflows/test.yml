@@ -16,7 +16,7 @@ jobs:
 
     - name: Container_Registry_Install
       run: |
-        if [ "${{ secrets.INFRA_STATUS_CONTAINER_REGISTER }}" == "yes" ]; then
+        if [ "${{ vars.INFRA_STATUS_CONTAINER_REGISTER }}" == "yes" ]; then
           az login --service-principal -u ${{ secrets.SERVICE_PRINCIPAL_ID }} -p ${{ secrets.SERVICE_PRINCIPAL_KEY }} --tenant ${{ secrets.TENANT_ID }}
           deploymentName='MyDeployment'
           echo "a"
