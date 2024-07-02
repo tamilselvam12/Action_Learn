@@ -16,3 +16,4 @@ jobs:
 
     - name: ContainerRegistry
       run: echo "ARM Template"
+      run: echo ${{ secrets.CONTAINERREGISTER_NAME }}
