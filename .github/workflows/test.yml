@@ -14,5 +14,7 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: ContainerRegistry
-      run: echo ${{ secrets.CONTAINERREGISTER_NAME }}
+    - name: Print ContainerRegistry Variable
+      run: echo $CONTAINERREGISTER_NAME
+      env:
+        CONTAINERREGISTER_NAME: ${{ vars.CONTAINERREGISTER_NAME }}
