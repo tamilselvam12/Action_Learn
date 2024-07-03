@@ -42,5 +42,7 @@ jobs:
         sed -i "s|{{.tenanId}}|${{ secrets.TENANT_ID }}|" KeyVault.json
         sed -i "s|{{.spname}}|${{ secrets.SERVICE_PRINCIPAL_ID }}|" KeyVault.json
         sed -i "s|{{.location}}|${{ vars.LOCATION_NAME }}|" KeyVault.json      
+        sed -i "s|{{.privateEndpointName}}|${{ vars.PRIVATEENDPOINT_NAME }}|" KeyVault.json      
+        sed -i "s|{{.privateDnsZoneName}}|${{ vars.PRIVATEDNSZONE_NAME }}|" KeyVault.json      
         cat KeyVault.json
         az deployment group create --resource-group ${{ vars.RESOURCEGROUP_NAME }} --name $deploymentName --template-file KeyVault.json
