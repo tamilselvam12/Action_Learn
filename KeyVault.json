@@ -139,16 +139,25 @@
             }
         },
         {
-            "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
+            "type": "Microsoft.Network/privateDnsZones",
             "apiVersion": "2021-05-01",
-            "name": "[concat(parameters('privateDnsZoneName'), '/', parameters('keyvaultvnet'))]",
-            "location": "global",
-            "properties": {
-                "virtualNetwork": {
-                    "id": "[parameters('keyvaultvnet')]"
-                },
-                "registrationEnabled": false
-            }
+            "name": "[parameters('privateDnsZoneName')]",
+            "location": "[parameters('location')]",
+            "properties": {},
+            "resources": [
+                {
+                    "type": "virtualNetworkLinks",
+                    "apiVersion": "2021-05-01",
+                    "name": "[concat(parameters('privateDnsZoneName'), '-', parameters('keyvaultvnet'))]",
+                    "location": "[parameters('location')]",
+                    "properties": {
+                        "virtualNetwork": {
+                            "id": "[parameters('keyvaultvnet')]"
+                        },
+                        "registrationEnabled": false
+                    }
+                }
+            ]
         }
     ]
 }
