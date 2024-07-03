@@ -37,7 +37,7 @@
                 "accessPolicies": [
                     {
                         "tenantId": "{{.tenanId}}",
-                        "objectId": "{{.objectId}}",
+                        "objectId": "{{.spname}}",
                         "permissions": {
                             "keys": [
                                 "Get",
