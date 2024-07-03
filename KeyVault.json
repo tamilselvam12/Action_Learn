@@ -7,7 +7,7 @@
             "type": "String"
         },
         "keyvaultvnet": {
-            "defaultValue": "s2p-demo-vnet",
+            "defaultValue": "/subscriptions/d6233897-5c9f-47f9-8507-6d4ada2d5183/resourceGroups/I2P_Platform_Demo/providers/Microsoft.Network/virtualNetworks/s2p-demo-vnet",
             "type": "String"
         },
         "subnetname": {
@@ -146,10 +146,9 @@
             "properties": {},
             "resources": [
                 {
-                    "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
+                    "type": "virtualNetworkLinks",
                     "apiVersion": "2021-05-01",
-                    "name": "vnetlink",
-                    "location": "[parameters('location')]",
+                    "name": "[concat(parameters('privateDnsZoneName'), '/link')]",
                     "dependsOn": [
                         "[resourceId('Microsoft.Network/privateDnsZones', parameters('privateDnsZoneName'))]"
                     ],
