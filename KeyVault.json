@@ -142,14 +142,17 @@
             "type": "Microsoft.Network/privateDnsZones",
             "apiVersion": "2021-05-01",
             "name": "[parameters('privateDnsZoneName')]",
-            "location": "global",
+            "location": "[parameters('location')]",
             "properties": {},
             "resources": [
                 {
-                    "type": "virtualNetworkLinks",
+                    "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
                     "apiVersion": "2021-05-01",
-                    "name": "[concat(parameters('privateDnsZoneName'), '-link')]",
-                    "location": "global",
+                    "name": "vnetlink",
+                    "location": "[parameters('location')]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Network/privateDnsZones', parameters('privateDnsZoneName'))]"
+                    ],
                     "properties": {
                         "virtualNetwork": {
                             "id": "[parameters('keyvaultvnet')]"
