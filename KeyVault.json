@@ -148,7 +148,7 @@
                 {
                     "type": "virtualNetworkLinks",
                     "apiVersion": "2021-05-01",
-                    "name": "[concat(parameters('privateDnsZoneName'), '-', parameters('keyvaultvnet'))]",
+                    "name": "[concat(parameters('privateDnsZoneName'), '-s2p-demo-vnet')]",
                     "location": "[parameters('location')]",
                     "properties": {
                         "virtualNetwork": {
