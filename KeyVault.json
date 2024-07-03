@@ -2,36 +2,12 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "keyvaultname": {
-            "defaultValue": "reckittpocname005",
+        "vaults_reckittpocname007_name": {
+            "defaultValue": "reckittpocname007",
             "type": "String"
         },
-        "keyvaultvnet": {
-            "defaultValue": "/subscriptions/d6233897-5c9f-47f9-8507-6d4ada2d5183/resourceGroups/I2P_Platform_Demo/providers/Microsoft.Network/virtualNetworks/s2p-demo-vnet",
-            "type": "String"
-        },
-        "subnetname": {
-            "defaultValue": "s2p-demo-subnet",
-            "type": "String"
-        },
-        "location": {
-            "defaultValue": "West Europe",
-            "type": "String"
-        },
-        "tenantId": {
-            "defaultValue": "12346",
-            "type": "String"
-        },
-        "spname": {
-            "defaultValue": "12323",
-            "type": "String"
-        },
-        "privateEndpointName": {
-            "defaultValue": "reckittpocprivatename",
-            "type": "String"
-        },
-        "privateDnsZoneName": {
-            "defaultValue": "reckittprivatelink.vaultcore.azure.net",
+        "virtualnetworks_s2p_demo_vnet_externalid": {
+            "defaultValue": "/subscriptions/d6233897-5c9f-47f9-8507-6d4ada2d5183/resourceGroups/i2p_platform_demo/providers/microsoft.network/virtualnetworks/s2p-demo-vnet",
             "type": "String"
         }
     },
@@ -39,127 +15,54 @@
     "resources": [
         {
             "type": "Microsoft.KeyVault/vaults",
-            "apiVersion": "2022-11-01",
-            "name": "[parameters('keyvaultname')]",
-            "location": "[parameters('location')]",
+            "apiVersion": "2023-07-01",
+            "name": "[parameters('vaults_reckittpocname007_name')]",
+            "location": "westeurope",
             "properties": {
                 "sku": {
                     "family": "A",
                     "name": "Standard"
                 },
-                "tenantId": "[parameters('tenantId')]",
+                "tenantId": "95917aa5-d840-4443-a19e-aa3ad09d4bb5",
                 "networkAcls": {
                     "bypass": "AzureServices",
                     "defaultAction": "Deny",
+                    "ipRules": [],
                     "virtualNetworkRules": [
                         {
-                            "id": "[concat(parameters('keyvaultvnet'), '/subnets/', parameters('subnetname'))]",
-                            "ignoreMissingVnetServiceEndpoint": true
+                            "id": "[concat(parameters('virtualnetworks_s2p_demo_vnet_externalid'), '/subnets/s2p-demo-subnet')]",
+                            "ignoreMissingVnetServiceEndpoint": false
                         }
                     ]
                 },
-                "accessPolicies": [
-                    {
-                        "tenantId": "[parameters('tenantId')]",
-                        "objectId": "[parameters('spname')]",
-                        "permissions": {
-                            "keys": [
-                                "Get",
-                                "List",
-                                "Update",
-                                "Create",
-                                "Import",
-                                "Delete",
-                                "Recover",
-                                "Backup",
-                                "Restore",
-                                "GetRotationPolicy",
-                                "SetRotationPolicy",
-                                "Rotate"
-                            ],
-                            "secrets": [
-                                "Get",
-                                "List",
-                                "Set",
-                                "Delete",
-                                "Recover",
-                                "Backup",
-                                "Restore"
-                            ],
-                            "certificates": [
-                                "Get",
-                                "List",
-                                "Update",
-                                "Create",
-                                "Import",
-                                "Delete",
-                                "Recover",
-                                "Backup",
-                                "Restore",
-                                "ManageContacts",
-                                "ManageIssuers",
-                                "GetIssuers",
-                                "ListIssuers",
-                                "SetIssuers",
-                                "DeleteIssuers"
-                            ]
-                        }
-                    }
-                ],
+                "accessPolicies": [],
                 "enabledForDeployment": false,
                 "enabledForDiskEncryption": false,
                 "enabledForTemplateDeployment": false,
                 "enableSoftDelete": true,
                 "softDeleteRetentionInDays": 90,
                 "enableRbacAuthorization": true,
-                "vaultUri": "[concat('https://', parameters('keyvaultname'), '.vault.azure.net/')]",
+                "vaultUri": "[concat('https://', parameters('vaults_reckittpocname007_name'), '.vault.azure.net/')]",
                 "provisioningState": "Succeeded",
-                "publicNetworkAccess": "Disabled"
+                "publicNetworkAccess": "Enabled"
             }
         },
         {
-            "type": "Microsoft.Network/privateEndpoints",
-            "apiVersion": "2021-05-01",
-            "name": "[parameters('privateEndpointName')]",
-            "location": "[parameters('location')]",
+            "type": "Microsoft.KeyVault/vaults/privateEndpointConnections",
+            "apiVersion": "2023-07-01",
+            "name": "[concat(parameters('vaults_reckittpocname007_name'), '/reckittpocprivatename_4d3237d2-de1f-4013-81b4-d85dedf99094')]",
+            "location": "westeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.KeyVault/vaults', parameters('vaults_reckittpocname007_name'))]"
+            ],
             "properties": {
-                "subnet": {
-                    "id": "[concat(parameters('keyvaultvnet'), '/subnets/', parameters('subnetname'))]"
-                },
-                "privateLinkServiceConnections": [
-                    {
-                        "name": "[concat(parameters('keyvaultname'), '-plsc')]",
-                        "properties": {
-                            "privateLinkServiceId": "[resourceId('Microsoft.KeyVault/vaults', parameters('keyvaultname'))]",
-                            "groupIds": [ "vault" ],
-                            "requestMessage": "Please approve the connection."
-                        }
-                    }
-                ]
-            }
-        },
-        {
-            "type": "Microsoft.Network/privateDnsZones",
-            "apiVersion": "2021-05-01",
-            "name": "[parameters('privateDnsZoneName')]",
-            "location": "[parameters('location')]",
-            "properties": {},
-            "resources": [
-                {
-                    "type": "virtualNetworkLinks",
-                    "apiVersion": "2021-05-01",
-                    "name": "[concat(parameters('privateDnsZoneName'), '/link')]",
-                    "dependsOn": [
-                        "[resourceId('Microsoft.Network/privateDnsZones', parameters('privateDnsZoneName'))]"
-                    ],
-                    "properties": {
-                        "virtualNetwork": {
-                            "id": "[parameters('keyvaultvnet')]"
-                        },
-                        "registrationEnabled": false
-                    }
+                "provisioningState": "Succeeded",
+                "privateEndpoint": {},
+                "privateLinkServiceConnectionState": {
+                    "status": "Approved",
+                    "actionsRequired": "None"
                 }
-            ]
+            }
         }
     ]
 }
