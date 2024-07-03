@@ -26,7 +26,7 @@ jobs:
 
   KeyVault:
     runs-on: ubuntu-latest
-    if: ${{ vars.INFRA_STATUS_CONTAINER_REGISTER == 'YES' }}
+    if: ${{ vars.INFRA_STATUS_KEYVAULT == 'YES' }}
 
     steps:
     - name: Checkout repository
