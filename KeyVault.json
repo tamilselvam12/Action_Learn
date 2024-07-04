@@ -2,12 +2,12 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "vaults_reckittpocname007_name": {
-            "defaultValue": "reckittpocname007",
+        "keyvaultname": {
+            "defaultValue": "{{.KEYVAULT_NAME}}",
             "type": "String"
         },
-        "virtualnetworks_s2p_demo_vnet_externalid": {
-            "defaultValue": "/subscriptions/d6233897-5c9f-47f9-8507-6d4ada2d5183/resourceGroups/i2p_platform_demo/providers/microsoft.network/virtualnetworks/s2p-demo-vnet",
+        "keyvaultvnet": {
+            "defaultValue": "{{.VNETNAME}}",
             "type": "String"
         }
     },
@@ -15,20 +15,20 @@
         {
             "type": "Microsoft.KeyVault/vaults",
             "apiVersion": "2023-07-01",
-            "name": "[parameters('vaults_reckittpocname007_name')]",
-            "location": "westeurope",
+            "name": "[parameters('keyvaultname')]",
+            "location": "{{.location}}",
             "properties": {
                 "sku": {
                     "family": "A",
                     "name": "Standard"
                 },
-                "tenantId": "95917aa5-d840-4443-a19e-aa3ad09d4bb5",
+                "tenantId": "{{.TENANTID}}",
                 "networkAcls": {
                     "bypass": "AzureServices",
                     "defaultAction": "Deny",
                     "virtualNetworkRules": [
                         {
-                            "id": "[concat(parameters('virtualnetworks_s2p_demo_vnet_externalid'), '/subnets/s2p-demo-subnet')]",
+                            "id": "[concat(parameters('keyvaultvnet'), '/subnets/s2p-demo-subnet')]",
                             "ignoreMissingVnetServiceEndpoint": false
                         }
                     ]
@@ -36,24 +36,8 @@
                 "enableSoftDelete": true,
                 "softDeleteRetentionInDays": 90,
                 "enableRbacAuthorization": true,
-                "vaultUri": "[concat('https://', parameters('vaults_reckittpocname007_name'), '.vault.azure.net/')]",
-                "publicNetworkAccess": "Enabled"
-            }
-        },
-        {
-            "type": "Microsoft.KeyVault/vaults/privateEndpointConnections",
-            "apiVersion": "2023-07-01",
-            "name": "[concat(parameters('vaults_reckittpocname007_name'), '/reckittpocprivatename_4d3237d2-de1f-4013-81b4-d85dedf99094')]",
-            "location": "westeurope",
-            "dependsOn": [
-                "[resourceId('Microsoft.KeyVault/vaults', parameters('vaults_reckittpocname007_name'))]"
-            ],
-            "properties": {
-                "provisioningState": "Succeeded",
-                "privateLinkServiceConnectionState": {
-                    "status": "Approved",
-                    "actionsRequired": "None"
-                }
+                "vaultUri": "[concat('https://', parameters('keyvaultname'), '.vault.azure.net/')]",
+                "publicNetworkAccess": "Disabled"
             }
         }
     ]
