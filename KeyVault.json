@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "keyvaultname": {
-            "defaultValue": "{{.KEYVAULT_NAME}}",
+            "defaultValue": "{{.KEYVAULTNAME}}",
             "type": "String"
         },
         "keyvaultvnet": {
@@ -16,7 +16,7 @@
             "type": "Microsoft.KeyVault/vaults",
             "apiVersion": "2023-07-01",
             "name": "[parameters('keyvaultname')]",
-            "location": "{{.location}}",
+            "location": "{{.LOCATION}}",
             "properties": {
                 "sku": {
                     "family": "A",
