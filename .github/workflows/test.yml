@@ -38,7 +38,7 @@ jobs:
         deploymentName='MyDeployment'
         sed -i "s|{{.KEYVAULTNAME}}|${{ vars.KEYVAULT_NAME }}|" KeyVault.json
         sed -i "s|{{.VNETNAME}}|${{ vars.VNET_NAME }}|" KeyVault.json
-        sed -i "s|{{.subnetname}}|${{ vars.SUBNET_NAME }}|" KeyVault.json     
+        sed -i "s|{{.SUBNETNAME}}|${{ vars.SUBNET_NAME }}|" KeyVault.json     
         sed -i "s|{{.TENANTID}}|${{ secrets.TENANT_ID }}|" KeyVault.json
         sed -i "s|{{.LOCATION}}|${{ vars.LOCATION_NAME }}|" KeyVault.json      
         cat KeyVault.json
