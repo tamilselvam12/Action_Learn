@@ -36,13 +36,13 @@ jobs:
       run: |
         az login --service-principal -u ${{ secrets.SERVICE_PRINCIPAL_ID }} -p ${{ secrets.SERVICE_PRINCIPAL_KEY }} --tenant ${{ secrets.TENANT_ID }}
         deploymentName='MyDeployment'
-        # sed -i "s|{{.KEYVAULTNAME}}|${{ vars.KEYVAULT_NAME }}|" KeyVault.json
-        # sed -i "s|{{.VNETNAME}}|${{ vars.VNET_NAME }}|" KeyVault.json
-        # sed -i "s|{{.SUBNETNAME}}|${{ vars.SUBNET_NAME }}|" KeyVault.json     
-        # sed -i "s|{{.TENANTID}}|${{ secrets.TENANT_ID }}|" KeyVault.json
-        # sed -i "s|{{.LOCATIONNAME}}|${{ vars.LOCATION_NAME }}|" KeyVault.json      
-        # cat KeyVault.json
-        # az deployment group create --resource-group S2P_GitHub_PoC --name MyDeployment --template-file KeyVault.json
+        sed -i "s|{{.KEYVAULTNAME}}|${{ vars.KEYVAULT_NAME }}|" KeyVault.json
+        sed -i "s|{{.VNETNAME}}|${{ vars.VNET_NAME }}|" KeyVault.json
+        sed -i "s|{{.SUBNETNAME}}|${{ vars.SUBNET_NAME }}|" KeyVault.json     
+        sed -i "s|{{.TENANTID}}|${{ secrets.TENANT_ID }}|" KeyVault.json
+        sed -i "s|{{.LOCATIONNAME}}|${{ vars.LOCATION_NAME }}|" KeyVault.json      
+        cat KeyVault.json
+        az deployment group create --resource-group S2P_GitHub_PoC --name MyDeployment --template-file KeyVault.json
         
         echo "Update Private end point"
         # sed -i "s|{{.KEYVAULTPRIVATEENDPOINTNAME}}|${{ vars.KEYVAULT_PRIVATEENDPOINT_NAME }}|" KeyVaultPrivateEndPoint.json
