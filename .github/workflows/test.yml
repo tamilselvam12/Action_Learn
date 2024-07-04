@@ -45,7 +45,7 @@ jobs:
         # az deployment group create --resource-group S2P_GitHub_PoC --name MyDeployment --template-file KeyVault.json
         
         echo "Update Private end point"
-        sed -i "s|{{.KEYVAULTPRIVATEENDPOINTNAME}}|${{ vars.KEYVAULT_PRIVATEENDPOINT_NAME }}|" KeyVaultPrivateEndPoint.json
-        sed -i "s|{{.LOCATIONNAME}}|${{ vars.LOCATION_NAME }}|" KeyVaultPrivateEndPoint.json
+        # sed -i "s|{{.KEYVAULTPRIVATEENDPOINTNAME}}|${{ vars.KEYVAULT_PRIVATEENDPOINT_NAME }}|" KeyVaultPrivateEndPoint.json
+        # sed -i "s|{{.LOCATIONNAME}}|${{ vars.LOCATION_NAME }}|" KeyVaultPrivateEndPoint.json
         cat KeyVaultPrivateEndPoint.json
         az deployment group create --resource-group S2P_GitHub_PoC --name MyDeployment --template-file KeyVaultPrivateEndPoint.json
