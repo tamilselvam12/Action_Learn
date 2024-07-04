@@ -43,3 +43,8 @@ jobs:
         sed -i "s|{{.LOCATION}}|${{ vars.LOCATION_NAME }}|" KeyVault.json      
         cat KeyVault.json
         az deployment group create --resource-group S2P_GitHub_PoC --name MyDeployment --template-file KeyVault.json
+        
+        echo "Update Private end point"
+        sed -i "s|{{.KEYVAULTPRIVATEENDPOINTNAME}}|${{ vars.KEYVAULT_PRIVATEENDPOINT_NAME }}|" KeyVaultPrivateEndPoint.json
+        sed -i "s|{{.LOCATION}}|${{ vars.LOCATION_NAME }}|" KeyVaultPrivateEndPoint.json  
+        az deployment group create --resource-group S2P_GitHub_PoC --name MyDeployment --template-file KeyVaultPrivateEndPoint.json
