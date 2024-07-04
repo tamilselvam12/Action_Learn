@@ -12,7 +12,7 @@
         },
         "privateLinkResource": {
             "type": "String",
-            "defaultValue": "/subscriptions/d6233897-5c9f-47f9-8507-6d4ada2d5183/resourceGroups/S2P_GitHub_PoC/providers/Microsoft.KeyVault/vaults/reckittpocnamepoc011"
+            "defaultValue": "/subscriptions/d6233897-5c9f-47f9-8507-6d4ada2d5183/resourceGroups/S2P_GitHub_PoC/providers/Microsoft.KeyVault/vaults/keyvaultnamereckitt007"
         },
         "targetSubResource": {
             "type": "Array",
