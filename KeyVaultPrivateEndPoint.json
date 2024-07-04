@@ -4,11 +4,11 @@
     "parameters": {
         "location": {
             "type": "String",
-            "defaultValue": "{{.LOCATIONNAME}}"
+            "defaultValue": "West Europe"
         },
         "privateEndpointName": {
             "type": "String",
-            "defaultValue": "{{.KEYVAULTPRIVATEENDPOINTNAME}}"
+            "defaultValue": "privateEndpointnamepoctest"
         },
         "privateLinkResource": {
             "type": "String",
