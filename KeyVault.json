@@ -28,7 +28,7 @@
                     "defaultAction": "Deny",
                     "virtualNetworkRules": [
                         {
-                            "id": "[concat(parameters('keyvaultvnet'), '/subnets/s2p-demo-subnet')]",
+                            "id": "[concat(parameters('keyvaultvnet'), '/subnets/{{.SUBNETNAME}}')]",
                             "ignoreMissingVnetServiceEndpoint": false
                         }
                     ]
