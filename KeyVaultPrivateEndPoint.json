@@ -1,0 +1,101 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "String",
+            "defaultValue": "{{.LOCATIONNAME}}"
+        },
+        "privateEndpointName": {
+            "type": "String",
+            "defaultValue": "{{.KEYVAULTPRIVATEENDPOINTNAME}}"
+        },
+        "privateLinkResource": {
+            "type": "String",
+            "defaultValue": "/subscriptions/d6233897-5c9f-47f9-8507-6d4ada2d5183/resourceGroups/S2P_GitHub_PoC/providers/Microsoft.KeyVault/vaults/reckittpocnamepoc011"
+        },
+        "targetSubResource": {
+            "type": "Array",
+            "defaultValue": ["vault"]
+        },
+        "requestMessage": {
+            "type": "String",
+            "defaultValue": ""
+        },
+        "subnet": {
+            "type": "String",
+            "defaultValue": "/subscriptions/d6233897-5c9f-47f9-8507-6d4ada2d5183/resourceGroups/I2P_Platform_Demo/providers/Microsoft.Network/virtualNetworks/s2p-demo-vnet/subnets/s2p-demo-subnet"
+        },
+        "virtualNetworkId": {
+            "type": "String",
+            "defaultValue": "/subscriptions/d6233897-5c9f-47f9-8507-6d4ada2d5183/resourceGroups/I2P_Platform_Demo/providers/Microsoft.Network/virtualNetworks/s2p-demo-vnet"
+        },
+        "virtualNetworkResourceGroup": {
+            "type": "String",
+            "defaultValue": "I2P_Platform_Demo"
+        },
+        "subnetDeploymentName": {
+            "type": "String",
+            "defaultValue": "UpdateSubnetDeployment-20240703215529"
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Network/privateEndpoints",
+            "apiVersion": "2021-05-01",
+            "name": "[parameters('privateEndpointName')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [],
+            "tags": {},
+            "properties": {
+                "subnet": {
+                    "id": "[parameters('subnet')]"
+                },
+                "customNetworkInterfaceName": "privateEndpointnamepoctest-nic",
+                "privateLinkServiceConnections": [
+                    {
+                        "name": "[parameters('privateEndpointName')]",
+                        "properties": {
+                            "privateLinkServiceId": "[parameters('privateLinkResource')]",
+                            "groupIds": "[parameters('targetSubResource')]"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2017-05-10",
+            "name": "DnsZoneGroup-20240703215530",
+            "dependsOn": [
+                "[parameters('privateEndpointName')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "resources": [
+                        {
+                            "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
+                            "apiVersion": "2021-05-01",
+                            "name": "[concat(parameters('privateEndpointName'), '/', 'default')]",
+                            "location": "[parameters('location')]",
+                            "properties": {
+                                "privateDnsZoneConfigs": [
+                                    {
+                                        "name": "privatelink-vaultcore-azure-net",
+                                        "properties": {
+                                            "privateDnsZoneId": "/subscriptions/d6233897-5c9f-47f9-8507-6d4ada2d5183/resourceGroups/I2P_Platform_Demo/providers/Microsoft.Network/privateDnsZones/privatelink.vaultcore.azure.net"
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            },
+            "resourceGroup": "S2P_GitHub_PoC"
+        }
+    ]
+}
