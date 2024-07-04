@@ -4,15 +4,15 @@
     "parameters": {
         "location": {
             "type": "String",
-            "defaultValue": "West Europe"
+            "defaultValue": "{{.LOCATIONNAME}}"
         },
         "privateEndpointName": {
             "type": "String",
-            "defaultValue": "privateEndpointnamepoctest"
+            "defaultValue": "{{.KEYVAULTPRIVATEENDPOINTNAME}}"
         },
         "privateLinkResource": {
             "type": "String",
-            "defaultValue": "/subscriptions/d6233897-5c9f-47f9-8507-6d4ada2d5183/resourceGroups/S2P_GitHub_PoC/providers/Microsoft.KeyVault/vaults/keyvaultnamereckitt008"
+            "defaultValue": "/subscriptions/{{.SUBSCRIPTIONSID}}/resourceGroups/{{.RESOURCEGROUPNAME}}/providers/Microsoft.KeyVault/vaults/{{.KEYVAULTNAME}}"
         },
         "targetSubResource": {
             "type": "Array",
@@ -24,15 +24,15 @@
         },
         "subnet": {
             "type": "String",
-            "defaultValue": "/subscriptions/d6233897-5c9f-47f9-8507-6d4ada2d5183/resourceGroups/I2P_Platform_Demo/providers/Microsoft.Network/virtualNetworks/s2p-demo-vnet/subnets/s2p-demo-subnet"
+            "defaultValue": "/subscriptions/{{.SUBSCRIPTIONSID}}/resourceGroups/{{.VNETRESOURCEGROUPNAME}}/providers/Microsoft.Network/virtualNetworks/{{.VNETNAME}}/subnets/{{.SUBNETNAME}}"
         },
         "virtualNetworkId": {
             "type": "String",
-            "defaultValue": "/subscriptions/d6233897-5c9f-47f9-8507-6d4ada2d5183/resourceGroups/I2P_Platform_Demo/providers/Microsoft.Network/virtualNetworks/s2p-demo-vnet"
+            "defaultValue": "/subscriptions/{{.SUBSCRIPTIONSID}}/resourceGroups/{{.VNETRESOURCEGROUPNAME}}/providers/Microsoft.Network/virtualNetworks/{{.VNETNAME}}"
         },
         "virtualNetworkResourceGroup": {
             "type": "String",
-            "defaultValue": "I2P_Platform_Demo"
+            "defaultValue": "{{.VNETRESOURCEGROUPNAME}}"
         },
         "subnetDeploymentName": {
             "type": "String",
@@ -86,7 +86,7 @@
                                     {
                                         "name": "privatelink-vaultcore-azure-net",
                                         "properties": {
-                                            "privateDnsZoneId": "/subscriptions/d6233897-5c9f-47f9-8507-6d4ada2d5183/resourceGroups/I2P_Platform_Demo/providers/Microsoft.Network/privateDnsZones/privatelink.vaultcore.azure.net"
+                                            "privateDnsZoneId": "/subscriptions/{{.SUBSCRIPTIONSID}}/resourceGroups/{{.VNETRESOURCEGROUPNAME}}/providers/Microsoft.Network/privateDnsZones/privatelink.vaultcore.azure.net"
                                         }
                                     }
                                 ]
@@ -95,7 +95,7 @@
                     ]
                 }
             },
-            "resourceGroup": "S2P_GitHub_PoC"
+            "resourceGroup": "{{.RESOURCEGROUPNAME}}"
         }
     ]
 }
