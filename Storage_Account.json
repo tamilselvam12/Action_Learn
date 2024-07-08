@@ -306,27 +306,6 @@
                     }
                 ]
             }
-        },
-        {
-            "type": "Microsoft.Network/privateDnsZones",
-            "apiVersion": "2022-05-01",
-            "name": "privatelink.blob.core.windows.net",
-            "location": "global"
-        },
-        {
-            "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
-            "apiVersion": "2022-05-01",
-            "name": "[concat('privatelink.blob.core.windows.net', '/', split(parameters('storageaccountvnet'), '/')[8])]",
-            "location": "global",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/privateDnsZones', 'privatelink.blob.core.windows.net')]"
-            ],
-            "properties": {
-                "virtualNetwork": {
-                    "id": "[parameters('storageaccountvnet')]"
-                },
-                "registrationEnabled": false
-            }
         }
     ]
 }
