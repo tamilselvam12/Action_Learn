@@ -76,5 +76,5 @@ jobs:
         sed -i "s|{{.VNETNAME}}|${{ vars.VNET_NAME }}|" Storage_Account.json
         sed -i "s|{{.SUBNETNAME}}|${{ vars.SUBNET_NAME }}|" Storage_Account.json
         sed -i "s|{{.location}}|${{ vars.LOCATION_NAME }}|" Storage_Account.json  
-        cat Container_Registry.json   
+        cat Storage_Account.json   
         az deployment group create --resource-group ${{ vars.RESOURCEGROUP_NAME }} --name $deploymentName --template-file Storage_Account.json        
