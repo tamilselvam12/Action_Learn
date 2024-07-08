@@ -1,24 +1,35 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-  "contentVersion": "1.0.0.0",
-  "resources": [
-    {
-      "type": "Microsoft.CognitiveServices/accounts",
-      "apiVersion": "2021-04-30",
-      "name": "[parameters('formRecognizerAccountName')]",
-      "location": "[resourceGroup().location]",
-      "sku": {
-        "name": "F0"
-      },
-      "kind": "FormRecognizer",
-      "properties": {
-        "publicNetworkAccess": "Enabled"
-      }
-    }
-  ],
-  "parameters": {
-    "formRecognizerAccountName": {
-      "type": "string"
-    }
-  }
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "accounts_fr_S2P_POC_weurope_04_name": {
+            "defaultValue": "fr-S2P-POC-weurope-04",
+            "type": "String"
+        }
+        
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.CognitiveServices/accounts",
+            "apiVersion": "2024-04-01-preview",
+            "name": "[parameters('accounts_fr-S2P-POC-weurope-04_name')]",
+            "location": "westeurope",
+            "sku": {
+                "name": "S0"
+            },
+            "kind": "FormRecognizer",
+            "identity": {
+                "type": "None"
+            },
+            "properties": {
+               
+                "networkAcls": {
+                    "defaultAction": "Allow"
+                    
+                },
+                "publicNetworkAccess": "Enabled"
+            }
+        }
+    ]
 }
