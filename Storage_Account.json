@@ -7,7 +7,7 @@
             "type": "String"
         },
         "storageaccountvnet": {
-            "defaultValue": "{{.vnetname}}",
+            "defaultValue": "/subscriptions/{{.SUBSCRIPTIONSID}}/resourceGroups/{{.VNETRESOURCEGROUPNAME}}/providers/Microsoft.Network/virtualNetworks/{{.VNETNAME}}",
             "type": "String"
         },
         "subnet_id": {
