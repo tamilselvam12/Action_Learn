@@ -7,56 +7,56 @@ on:
   workflow_dispatch:
 
 jobs:
-  Container_Registry:
-    runs-on: ubuntu-latest
-    if: ${{ vars.INFRA_STATUS_CONTAINER_REGISTER == 'YES' }}
+  # Container_Registry:
+  #   runs-on: ubuntu-latest
+  #   if: ${{ vars.INFRA_STATUS_CONTAINER_REGISTER == 'YES' }}
 
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+  #   steps:
+  #   - name: Checkout repository
+  #     uses: actions/checkout@v2
 
-    - name: Container_Registry_Install
-      run: |
-        az login --service-principal -u ${{ secrets.SERVICE_PRINCIPAL_ID }} -p ${{ secrets.SERVICE_PRINCIPAL_KEY }} --tenant ${{ secrets.TENANT_ID }}
-        deploymentName='MyDeployment'
-        sed -i "s|{{.containerregistryname}}|${{ vars.CONTAINERREGISTER_NAME }}|" Container_Registry.json
-        sed -i "s|{{.location}}|${{ vars.LOCATION_NAME }}|" Container_Registry.json   
-        cat Container_Registry.json   
-        az deployment group create --resource-group ${{ vars.RESOURCEGROUP_NAME }} --name $deploymentName --template-file Container_Registry.json
+  #   - name: Container_Registry_Install
+  #     run: |
+  #       az login --service-principal -u ${{ secrets.SERVICE_PRINCIPAL_ID }} -p ${{ secrets.SERVICE_PRINCIPAL_KEY }} --tenant ${{ secrets.TENANT_ID }}
+  #       deploymentName='MyDeployment'
+  #       sed -i "s|{{.containerregistryname}}|${{ vars.CONTAINERREGISTER_NAME }}|" Container_Registry.json
+  #       sed -i "s|{{.location}}|${{ vars.LOCATION_NAME }}|" Container_Registry.json   
+  #       cat Container_Registry.json   
+  #       az deployment group create --resource-group ${{ vars.RESOURCEGROUP_NAME }} --name $deploymentName --template-file Container_Registry.json
 
-  KeyVault:
-    runs-on: ubuntu-latest
-    if: ${{ vars.INFRA_STATUS_KEYVAULT == 'YES' }}
+  # KeyVault:
+  #   runs-on: ubuntu-latest
+  #   if: ${{ vars.INFRA_STATUS_KEYVAULT == 'YES' }}
 
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+  #   steps:
+  #   - name: Checkout repository
+  #     uses: actions/checkout@v2
 
-    # - name: KeyVault_Install
-    #   run: |
-    #     az login --service-principal -u ${{ secrets.SERVICE_PRINCIPAL_ID }} -p ${{ secrets.SERVICE_PRINCIPAL_KEY }} --tenant ${{ secrets.TENANT_ID }}
-    #     deploymentName='MyDeployment'
-    #     sed -i "s|{{.KEYVAULTNAME}}|${{ vars.KEYVAULT_NAME }}|" KeyVault.json
-    #     sed -i "s|{{.TENANTID}}|${{ secrets.TENANT_ID }}|" KeyVault.json
-    #     sed -i "s|{{.LOCATIONNAME}}|${{ vars.LOCATION_NAME }}|" KeyVault.json
-    #     sed -i "s|{{.SUBSCRIPTIONSID}}|${{ secrets.SUBSCRIPTIONS_ID }}|" KeyVault.json
-    #     sed -i "s|{{.VNETRESOURCEGROUPNAME}}|${{ vars.VNET_RESOURCEGROUP_NAME }}|" KeyVault.json
-    #     sed -i "s|{{.VNETNAME}}|${{ vars.VNET_NAME }}|" KeyVault.json
-    #     sed -i "s|{{.SUBNETNAME}}|${{ vars.SUBNET_NAME }}|" KeyVault.json
-    #     cat KeyVault.json
-    #     az deployment group create --resource-group S2P_GitHub_PoC --name MyDeployment --template-file KeyVault.json
+  #   - name: KeyVault_Install
+  #     run: |
+  #       az login --service-principal -u ${{ secrets.SERVICE_PRINCIPAL_ID }} -p ${{ secrets.SERVICE_PRINCIPAL_KEY }} --tenant ${{ secrets.TENANT_ID }}
+  #       deploymentName='MyDeployment'
+  #       sed -i "s|{{.KEYVAULTNAME}}|${{ vars.KEYVAULT_NAME }}|" KeyVault.json
+  #       sed -i "s|{{.TENANTID}}|${{ secrets.TENANT_ID }}|" KeyVault.json
+  #       sed -i "s|{{.LOCATIONNAME}}|${{ vars.LOCATION_NAME }}|" KeyVault.json
+  #       sed -i "s|{{.SUBSCRIPTIONSID}}|${{ secrets.SUBSCRIPTIONS_ID }}|" KeyVault.json
+  #       sed -i "s|{{.VNETRESOURCEGROUPNAME}}|${{ vars.VNET_RESOURCEGROUP_NAME }}|" KeyVault.json
+  #       sed -i "s|{{.VNETNAME}}|${{ vars.VNET_NAME }}|" KeyVault.json
+  #       sed -i "s|{{.SUBNETNAME}}|${{ vars.SUBNET_NAME }}|" KeyVault.json
+  #       cat KeyVault.json
+  #       az deployment group create --resource-group S2P_GitHub_PoC --name MyDeployment --template-file KeyVault.json
         
-    #     echo "Update Private end point"
-    #     sed -i "s|{{.KEYVAULTPRIVATEENDPOINTNAME}}|${{ vars.KEYVAULT_PRIVATEENDPOINT_NAME }}|" KeyVaultPrivateEndPoint.json
-    #     sed -i "s|{{.LOCATIONNAME}}|${{ vars.LOCATION_NAME }}|" KeyVaultPrivateEndPoint.json
-    #     sed -i "s|{{.SUBSCRIPTIONSID}}|${{ secrets.SUBSCRIPTIONS_ID }}|" KeyVaultPrivateEndPoint.json
-    #     sed -i "s|{{.RESOURCEGROUPNAME}}|${{ vars.RESOURCEGROUP_NAME }}|" KeyVaultPrivateEndPoint.json
-    #     sed -i "s|{{.KEYVAULTNAME}}|${{ vars.KEYVAULT_NAME }}|" KeyVaultPrivateEndPoint.json
-    #     sed -i "s|{{.VNETRESOURCEGROUPNAME}}|${{ vars.VNET_RESOURCEGROUP_NAME }}|" KeyVaultPrivateEndPoint.json
-    #     sed -i "s|{{.VNETNAME}}|${{ vars.VNET_NAME }}|" KeyVaultPrivateEndPoint.json
-    #     sed -i "s|{{.SUBNETNAME}}|${{ vars.SUBNET_NAME }}|" KeyVaultPrivateEndPoint.json
-    #     cat KeyVaultPrivateEndPoint.json
-    #     az deployment group create --resource-group S2P_GitHub_PoC --name MyDeployment --template-file KeyVaultPrivateEndPoint.json
+  #       echo "Update Private end point"
+  #       sed -i "s|{{.KEYVAULTPRIVATEENDPOINTNAME}}|${{ vars.KEYVAULT_PRIVATEENDPOINT_NAME }}|" KeyVaultPrivateEndPoint.json
+  #       sed -i "s|{{.LOCATIONNAME}}|${{ vars.LOCATION_NAME }}|" KeyVaultPrivateEndPoint.json
+  #       sed -i "s|{{.SUBSCRIPTIONSID}}|${{ secrets.SUBSCRIPTIONS_ID }}|" KeyVaultPrivateEndPoint.json
+  #       sed -i "s|{{.RESOURCEGROUPNAME}}|${{ vars.RESOURCEGROUP_NAME }}|" KeyVaultPrivateEndPoint.json
+  #       sed -i "s|{{.KEYVAULTNAME}}|${{ vars.KEYVAULT_NAME }}|" KeyVaultPrivateEndPoint.json
+  #       sed -i "s|{{.VNETRESOURCEGROUPNAME}}|${{ vars.VNET_RESOURCEGROUP_NAME }}|" KeyVaultPrivateEndPoint.json
+  #       sed -i "s|{{.VNETNAME}}|${{ vars.VNET_NAME }}|" KeyVaultPrivateEndPoint.json
+  #       sed -i "s|{{.SUBNETNAME}}|${{ vars.SUBNET_NAME }}|" KeyVaultPrivateEndPoint.json
+  #       cat KeyVaultPrivateEndPoint.json
+  #       az deployment group create --resource-group S2P_GitHub_PoC --name MyDeployment --template-file KeyVaultPrivateEndPoint.json
 
   Storage_Accounnt:
     runs-on: ubuntu-latest
