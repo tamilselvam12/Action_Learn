@@ -1,0 +1,35 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "accounts_cv_S2P_POC_weurope_name": {
+            "defaultValue": "cog-ci-amway-dev-weurope-03",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.CognitiveServices/accounts",
+            "apiVersion": "2024-04-01-preview",
+            "name": "[parameters('accounts_cv_S2P_POC_weurope_name')]",
+            "location": "westeurope",
+            "sku": {
+                "name": "S1"
+            },
+            "kind": "ComputerVision",
+            "identity": {
+                "type": "None"
+            },
+            "properties": {
+                "customSubDomainName": "[parameters('accounts_cv_S2P_POC_weurope_name')]",
+                "networkAcls": {
+                    "defaultAction": "Allow"
+                    
+                    
+                },
+                "publicNetworkAccess": "Enabled"
+            }
+        }
+    ]
+}
