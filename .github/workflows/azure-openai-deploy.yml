@@ -14,9 +14,9 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Login to Azure
-      uses: azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+      run: |
+        az login --service-principal -u ${{ secrets.SERVICE_PRINCIPAL_ID }} -p ${{ secrets.SERVICE_PRINCIPAL_KEY }} --tenant ${{ secrets.TENANT_ID }}
+      
 
     - name: Deploy ARM template
       uses: azure/arm-deploy@v1
