@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "accounts_cv_S2P_POC_weurope_name": {
-            "defaultValue": "cog-ci-amway-dev-weurope-03",
+            "defaultValue": "cv_S2P_POC_weurope_name",
             "type": "String"
         }
     },
