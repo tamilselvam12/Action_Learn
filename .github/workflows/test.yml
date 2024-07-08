@@ -70,7 +70,7 @@ jobs:
       run: |
         az login --service-principal -u ${{ secrets.SERVICE_PRINCIPAL_ID }} -p ${{ secrets.SERVICE_PRINCIPAL_KEY }} --tenant ${{ secrets.TENANT_ID }}
         deploymentName='MyDeployment'
-        sed -i "s|{{.storagename}}|${{ vars.CONTAINERREGISTER_NAME }}|" Storage_Account.json
+        sed -i "s|{{.storagename}}|${{ vars.STORAGEACCOUNT_NAME }}|" Storage_Account.json
         sed -i "s|{{.SUBSCRIPTIONSID}}|${{ secrets.SUBSCRIPTIONS_ID }}|" Storage_Account.json
         sed -i "s|{{.VNETRESOURCEGROUPNAME}}|${{ vars.VNET_RESOURCEGROUP_NAME }}|" Storage_Account.json
         sed -i "s|{{.VNETNAME}}|${{ vars.VNET_NAME }}|" Storage_Account.json
