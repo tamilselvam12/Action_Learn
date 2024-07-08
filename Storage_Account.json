@@ -134,22 +134,6 @@
             }
         },
         {
-            "type": "Microsoft.Storage/storageAccounts/privateEndpointConnections",
-            "apiVersion": "2023-05-01",
-            "name": "[concat(parameters('storageaccountname'), '/', parameters('storageaccountname'), '.56ce9fa5-5eba-46bb-8e7a-003624504c50')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccountname'))]"
-            ],
-            "properties": {
-                "privateEndpoint": {},
-                "privateLinkServiceConnectionState": {
-                    "status": "Approved",
-                    "description": "Auto-Approved",
-                    "actionRequired": "None"
-                }
-            }
-        },
-        {
             "type": "Microsoft.Storage/storageAccounts/queueServices",
             "apiVersion": "2023-05-01",
             "name": "[concat(parameters('storageaccountname'), '/default')]",
