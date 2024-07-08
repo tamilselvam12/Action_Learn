@@ -1,29 +1,25 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-08-01/deploymentTemplate.json#",
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
         "storageaccountname": {
             "defaultValue": "{{.STORAGEACCOUNTNAME}}",
             "type": "String"
         },
-        "storageaccountvnet": {
+        "virtualNetworks_s2p_demo_vnet_externalid": {
             "defaultValue": "/subscriptions/{{.SUBSCRIPTIONSID}}/resourceGroups/{{.VNETRESOURCEGROUPNAME}}/providers/Microsoft.Network/virtualNetworks/{{.VNETNAME}}",
             "type": "String"
         },
-        "subnet_id": {
-            "defaultValue": "/subscriptions/{{.SUBSCRIPTIONSID}}/resourceGroups/{{.VNETRESOURCEGROUPNAME}}/providers/Microsoft.Network/virtualNetworks/{{.VNETNAME}}/subnets/{{.SUBNETNAME}}",
+		"location": {
+            "defaultValue": "{{.LOCATIONNAME}}",
             "type": "String"
-        },
-        "location": {
-            "type": "String",
-            "defaultValue": "{{.LOCATIONNAME}}"
         }
     },
     "variables": {},
     "resources": [
         {
             "type": "Microsoft.Storage/storageAccounts",
-            "apiVersion": "2022-09-01",
+            "apiVersion": "2023-05-01",
             "name": "[parameters('storageaccountname')]",
             "location": "[parameters('location')]",
             "sku": {
@@ -34,11 +30,24 @@
             "properties": {
                 "dnsEndpointType": "Standard",
                 "defaultToOAuthAuthentication": false,
-                "publicNetworkAccess": "Disabled",
+                "publicNetworkAccess": "Enabled",
                 "allowCrossTenantReplication": false,
                 "minimumTlsVersion": "TLS1_2",
                 "allowBlobPublicAccess": false,
                 "allowSharedKeyAccess": true,
+                "networkAcls": {
+                    "resourceAccessRules": [],
+                    "bypass": "AzureServices",
+                    "virtualNetworkRules": [
+                        {
+                            "id": "[concat(parameters('virtualNetworks_s2p_demo_vnet_externalid'), '/subnets/{{.SUBNETNAME}}')]",
+                            "action": "Allow",
+                            "state": "Succeeded"
+                        }
+                    ],
+                    "ipRules": [],
+                    "defaultAction": "Deny"
+                },
                 "supportsHttpsTrafficOnly": true,
                 "encryption": {
                     "requireInfrastructureEncryption": false,
@@ -67,7 +76,7 @@
         },
         {
             "type": "Microsoft.Storage/storageAccounts/blobServices",
-            "apiVersion": "2022-09-01",
+            "apiVersion": "2023-05-01",
             "name": "[concat(parameters('storageaccountname'), '/default')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccountname'))]"
@@ -102,7 +111,7 @@
         },
         {
             "type": "Microsoft.Storage/storageAccounts/fileServices",
-            "apiVersion": "2022-09-01",
+            "apiVersion": "2023-05-01",
             "name": "[concat(parameters('storageaccountname'), '/default')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccountname'))]"
@@ -125,8 +134,24 @@
             }
         },
         {
+            "type": "Microsoft.Storage/storageAccounts/privateEndpointConnections",
+            "apiVersion": "2023-05-01",
+            "name": "[concat(parameters('storageaccountname'), '/', parameters('storageaccountname'), '.56ce9fa5-5eba-46bb-8e7a-003624504c50')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccountname'))]"
+            ],
+            "properties": {
+                "privateEndpoint": {},
+                "privateLinkServiceConnectionState": {
+                    "status": "Approved",
+                    "description": "Auto-Approved",
+                    "actionRequired": "None"
+                }
+            }
+        },
+        {
             "type": "Microsoft.Storage/storageAccounts/queueServices",
-            "apiVersion": "2022-09-01",
+            "apiVersion": "2023-05-01",
             "name": "[concat(parameters('storageaccountname'), '/default')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccountname'))]"
@@ -139,7 +164,7 @@
         },
         {
             "type": "Microsoft.Storage/storageAccounts/tableServices",
-            "apiVersion": "2022-09-01",
+            "apiVersion": "2023-05-01",
             "name": "[concat(parameters('storageaccountname'), '/default')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccountname'))]"
@@ -152,115 +177,160 @@
         },
         {
             "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
-            "apiVersion": "2022-09-01",
+            "apiVersion": "2023-05-01",
             "name": "[concat(parameters('storageaccountname'), '/default/ci-images-folder')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageaccountname'), 'default')]",
                 "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccountname'))]"
             ],
             "properties": {
-                "metadata": {}
+                "immutableStorageWithVersioning": {
+                    "enabled": false
+                },
+                "defaultEncryptionScope": "$account-encryption-key",
+                "denyEncryptionScopeOverride": false,
+                "publicAccess": "None"
             }
         },
         {
             "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
-            "apiVersion": "2022-09-01",
+            "apiVersion": "2023-05-01",
             "name": "[concat(parameters('storageaccountname'), '/default/ci-input-folder')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageaccountname'), 'default')]",
                 "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccountname'))]"
             ],
             "properties": {
-                "metadata": {}
+                "immutableStorageWithVersioning": {
+                    "enabled": false
+                },
+                "defaultEncryptionScope": "$account-encryption-key",
+                "denyEncryptionScopeOverride": false,
+                "publicAccess": "None"
             }
         },
         {
             "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
-            "apiVersion": "2022-09-01",
+            "apiVersion": "2023-05-01",
             "name": "[concat(parameters('storageaccountname'), '/default/ci-ocr-folder')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageaccountname'), 'default')]",
                 "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccountname'))]"
             ],
             "properties": {
-                "metadata": {}
+                "immutableStorageWithVersioning": {
+                    "enabled": false
+                },
+                "defaultEncryptionScope": "$account-encryption-key",
+                "denyEncryptionScopeOverride": false,
+                "publicAccess": "None"
             }
         },
         {
             "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
-            "apiVersion": "2022-09-01",
+            "apiVersion": "2023-05-01",
             "name": "[concat(parameters('storageaccountname'), '/default/document-archive')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageaccountname'), 'default')]",
                 "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccountname'))]"
             ],
             "properties": {
-                "metadata": {}
+                "immutableStorageWithVersioning": {
+                    "enabled": false
+                },
+                "defaultEncryptionScope": "$account-encryption-key",
+                "denyEncryptionScopeOverride": false,
+                "publicAccess": "None"
             }
         },
         {
             "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
-            "apiVersion": "2022-09-01",
+            "apiVersion": "2023-05-01",
             "name": "[concat(parameters('storageaccountname'), '/default/document-images-archieve')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageaccountname'), 'default')]",
                 "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccountname'))]"
             ],
             "properties": {
-                "metadata": {}
+                "immutableStorageWithVersioning": {
+                    "enabled": false
+                },
+                "defaultEncryptionScope": "$account-encryption-key",
+                "denyEncryptionScopeOverride": false,
+                "publicAccess": "None"
             }
         },
         {
             "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
-            "apiVersion": "2022-09-01",
+            "apiVersion": "2023-05-01",
             "name": "[concat(parameters('storageaccountname'), '/default/document-ocr-archieve')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageaccountname'), 'default')]",
                 "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccountname'))]"
             ],
             "properties": {
-                "metadata": {}
+                "immutableStorageWithVersioning": {
+                    "enabled": false
+                },
+                "defaultEncryptionScope": "$account-encryption-key",
+                "denyEncryptionScopeOverride": false,
+                "publicAccess": "None"
             }
         },
         {
             "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
-            "apiVersion": "2022-09-01",
+            "apiVersion": "2023-05-01",
             "name": "[concat(parameters('storageaccountname'), '/default/document-raw')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageaccountname'), 'default')]",
                 "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccountname'))]"
             ],
             "properties": {
-                "metadata": {}
+                "immutableStorageWithVersioning": {
+                    "enabled": false
+                },
+                "defaultEncryptionScope": "$account-encryption-key",
+                "denyEncryptionScopeOverride": false,
+                "publicAccess": "None"
             }
         },
         {
             "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
-            "apiVersion": "2022-09-01",
+            "apiVersion": "2023-05-01",
             "name": "[concat(parameters('storageaccountname'), '/default/document-report')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageaccountname'), 'default')]",
                 "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccountname'))]"
             ],
             "properties": {
-                "metadata": {}
+                "immutableStorageWithVersioning": {
+                    "enabled": false
+                },
+                "defaultEncryptionScope": "$account-encryption-key",
+                "denyEncryptionScopeOverride": false,
+                "publicAccess": "None"
             }
         },
         {
             "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
-            "apiVersion": "2022-09-01",
+            "apiVersion": "2023-05-01",
             "name": "[concat(parameters('storageaccountname'), '/default/power-automate-config')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageaccountname'), 'default')]",
                 "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccountname'))]"
             ],
             "properties": {
-                "metadata": {}
+                "immutableStorageWithVersioning": {
+                    "enabled": false
+                },
+                "defaultEncryptionScope": "$account-encryption-key",
+                "denyEncryptionScopeOverride": false,
+                "publicAccess": "None"
             }
         },
         {
             "type": "Microsoft.Storage/storageAccounts/queueServices/queues",
-            "apiVersion": "2022-09-01",
+            "apiVersion": "2023-05-01",
             "name": "[concat(parameters('storageaccountname'), '/default/documents-queue')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts/queueServices', parameters('storageaccountname'), 'default')]",
@@ -272,7 +342,7 @@
         },
         {
             "type": "Microsoft.Storage/storageAccounts/queueServices/queues",
-            "apiVersion": "2022-09-01",
+            "apiVersion": "2023-05-01",
             "name": "[concat(parameters('storageaccountname'), '/default/documents-status-queue')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts/queueServices', parameters('storageaccountname'), 'default')]",
@@ -280,31 +350,6 @@
             ],
             "properties": {
                 "metadata": {}
-            }
-        },
-        {
-            "type": "Microsoft.Network/privateEndpoints",
-            "apiVersion": "2022-01-01",
-            "name": "[concat(parameters('storageaccountname'), '-pe')]",
-            "location": "[parameters('location')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccountname'))]"
-            ],
-            "properties": {
-                "subnet": {
-                    "id": "[parameters('subnet_id')]"
-                },
-                "privateLinkServiceConnections": [
-                    {
-                        "name": "[concat(parameters('storageaccountname'), '-pe')]",
-                        "properties": {
-                            "privateLinkServiceId": "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccountname'))]",
-                            "groupIds": [
-                                "blob"
-                            ]
-                        }
-                    }
-                ]
             }
         }
     ]
