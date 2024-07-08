@@ -1,9 +1,10 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
-  "contentVersion": "1.0.0.0",
-  "parameters": {
-    "formRecognizerAccountName": {
-      "value": "form-recognizer-S2P-POC-name"
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "accounts_fr-S2P-POC-weurope-04_name": {
+            "value": null
+        }
+       
     }
-  }
 }
