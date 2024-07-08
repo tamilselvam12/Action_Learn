@@ -2,8 +2,8 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "accounts_cv_S2P_POC_weurope_name": {
-            "defaultValue": "cv_S2P_POC_weurope_name",
+        "accounts_cv_S2P_POC_eastus_03_name": {
+            "defaultValue": "cv_S2P_POC_eastus_03",
             "type": "String"
         }
     },
@@ -12,7 +12,7 @@
         {
             "type": "Microsoft.CognitiveServices/accounts",
             "apiVersion": "2024-04-01-preview",
-            "name": "[parameters('accounts_cv_S2P_POC_weurope_name')]",
+            "name": "[parameters('accounts_cv_S2P_POC_eastus_03_name')]",
             "location": "eastus",
             "sku": {
                 "name": "S1"
@@ -22,7 +22,7 @@
                 "type": "None"
             },
             "properties": {
-                "customSubDomainName": "[parameters('accounts_cv_S2P_POC_weurope_name')]",
+                "customSubDomainName": "[parameters('accounts_cv_S2P_POC_eastus_03_name')]",
                 "networkAcls": {
                     "defaultAction": "Allow"
                     
