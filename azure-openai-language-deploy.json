@@ -2,8 +2,8 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "accounts_lg_S2P_POC_weurope_03_name": {
-            "defaultValue": "lg-iwi2p-ci-amway-dev-weurope-03",
+        "accounts_lg_S2P_POC_weurope_04_name": {
+            "defaultValue": "lg-iwi2p-ci-amway-dev-weurope-04",
             "type": "String"
         }
         
@@ -13,7 +13,7 @@
         {
             "type": "Microsoft.CognitiveServices/accounts",
             "apiVersion": "2024-04-01-preview",
-            "name": "[parameters('accounts_lg_S2P_POC_weurope_03_name')]",
+            "name": "[parameters('accounts_lg_S2P_POC_weurope_04_name')]",
             "location": "westeurope",
             "sku": {
                 "name": "S"
