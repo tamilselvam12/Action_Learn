@@ -24,7 +24,7 @@
             },
             "properties": {
                 "apiProperties": {},
-                "customSubDomainName": "[parameters('accounts_lg_S2P_POC_weurope_03_name')]",
+                
                 "networkAcls": {
                     "defaultAction": "Allow"
                     
