@@ -1,25 +1,36 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-  "contentVersion": "1.0.0.0",
-  "resources": [
-    {
-      "type": "Microsoft.CognitiveServices/accounts",
-      "apiVersion": "2021-04-30",
-      "name": "[parameters('openAIAccountName')]",
-      "location": "[resourceGroup().location]",
-      "sku": {
-        "name": "S0"
-      },
-      "kind": "OpenAI",
-      "properties": {
-        "publicNetworkAccess": "Enabled",
-        "apiType": "language"
-      }
-    }
-  ],
-  "parameters": {
-    "openAIAccountName": {
-      "type": "string"
-    }
-  }
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "accounts_lg_S2P_POC_weurope_03_name": {
+            "defaultValue": "lg-iwi2p-ci-amway-dev-weurope-03",
+            "type": "String"
+        }
+        
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.CognitiveServices/accounts",
+            "apiVersion": "2024-04-01-preview",
+            "name": "[parameters('accounts_lg_S2P_POC_weurope_03_name')]",
+            "location": "westeurope",
+            "sku": {
+                "name": "S"
+            },
+            "kind": "TextAnalytics",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "apiProperties": {},
+                "customSubDomainName": "[parameters('accounts_lg_S2P_POC_weurope_03_name')]",
+                "networkAcls": {
+                    "defaultAction": "Allow"
+                    
+                },
+                "publicNetworkAccess": "Enabled"
+            }
+        }
+    ]
 }
