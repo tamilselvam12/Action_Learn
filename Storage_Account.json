@@ -15,8 +15,8 @@
             "type": "String"
         },
         "location": {
-            "defaultValue": "{{.LOCATIONNAME}}",
-            "type": "String"
+            "type": "String",
+            "defaultValue": "{{.LOCATIONNAME}}"
         }
     },
     "variables": {},
