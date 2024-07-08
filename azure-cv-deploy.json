@@ -21,8 +21,7 @@
             "identity": {
                 "type": "None"
             },
-            "properties": {
-                "customSubDomainName": "[parameters('accounts_cv_S2P_POC_eastus_03_name')]",
+            "properties":
                 "networkAcls": {
                     "defaultAction": "Allow"
                     
