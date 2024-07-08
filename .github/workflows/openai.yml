@@ -1,1 +1,22 @@
+name: ARM Template 
 
+on:
+  push:
+    branches:
+      - none
+  workflow_dispatch:
+
+jobs:
+  Container_Registry:
+    runs-on: ubuntu-latest
+    if: ${{ vars.INFRA_STATUS_CONTAINER_REGISTER == 'YES' }}
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Azure_OpenAI_Deploy
+      run: |
+        az login --service-principal -u ${{ secrets.SERVICE_PRINCIPAL_ID }} -p ${{ secrets.SERVICE_PRINCIPAL_KEY }} --tenant ${{ secrets.TENANT_ID }}
+        deploymentName='MyDeployment'
+        az deployment group create --resource-group 'S2P_GitHub_PoC' --name MyDeployment --template-file accountsOpenAI.json
