@@ -1,0 +1,24 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "resources": [
+    {
+      "type": "Microsoft.CognitiveServices/accounts",
+      "apiVersion": "2021-04-30",
+      "name": "[parameters('openAIAccountName')]",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "S0"
+      },
+      "kind": "OpenAI",
+      "properties": {
+        "publicNetworkAccess": "Enabled"
+      }
+    }
+  ],
+  "parameters": {
+    "openAIAccountName": {
+      "type": "string"
+    }
+  }
+}
