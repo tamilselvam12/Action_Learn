@@ -1,21 +1,13 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-08-01/deploymentTemplate.json#",
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "storageAccounts_stgpciAKSweurope001_name": {
-            "defaultValue": "{{.storagename}}",
+        "storageAccounts_dsfdsfdsfdsfds_name": {
+            "defaultValue": "dsfdsfdsfdsfdsnes",
             "type": "String"
         },
-        "virtualNetworks_vnet_goldenplatform_ci_AKSTest_weurope_001_externalid": {
+        "virtualNetworks_s2p_demo_vnet_externalid": {
             "defaultValue": "/subscriptions/d6233897-5c9f-47f9-8507-6d4ada2d5183/resourceGroups/I2P_Platform_Demo/providers/Microsoft.Network/virtualNetworks/s2p-demo-vnet",
-            "type": "String"
-        },
-        "subnet_id": {
-            "defaultValue": "{{.subnetid}}",
-            "type": "String"
-        },
-        "location": {
-            "defaultValue": "{{.LOCATIONNAME}}",
             "type": "String"
         }
     },
@@ -23,35 +15,40 @@
     "resources": [
         {
             "type": "Microsoft.Storage/storageAccounts",
-            "apiVersion": "2022-09-01",
-            "name": "[parameters('storageAccounts_stgpciAKSweurope001_name')]",
-            "location": "[parameters('location')]",
+            "apiVersion": "2023-05-01",
+            "name": "[parameters('storageAccounts_dsfdsfdsfdsfds_name')]",
+            "location": "westeurope",
             "sku": {
-                "name": "Standard_GRS",
+                "name": "Standard_RAGRS",
                 "tier": "Standard"
             },
             "kind": "StorageV2",
             "properties": {
                 "dnsEndpointType": "Standard",
                 "defaultToOAuthAuthentication": false,
-                "publicNetworkAccess": "Disabled",
+                "publicNetworkAccess": "Enabled",
                 "allowCrossTenantReplication": false,
                 "minimumTlsVersion": "TLS1_2",
                 "allowBlobPublicAccess": false,
                 "allowSharedKeyAccess": true,
+                "largeFileSharesState": "Enabled",
+                "networkAcls": {
+                    "bypass": "AzureServices",
+                    "virtualNetworkRules": [
+                        {
+                            "id": "[concat(parameters('virtualNetworks_s2p_demo_vnet_externalid'), '/subnets/s2p-demo-subnet')]",
+                            "action": "Allow",
+                            "state": "Succeeded"
+                        }
+                    ],
+                    "ipRules": [],
+                    "defaultAction": "Deny"
+                },
                 "supportsHttpsTrafficOnly": true,
                 "encryption": {
                     "requireInfrastructureEncryption": false,
                     "services": {
                         "file": {
-                            "keyType": "Account",
-                            "enabled": true
-                        },
-                        "table": {
-                            "keyType": "Account",
-                            "enabled": true
-                        },
-                        "queue": {
                             "keyType": "Account",
                             "enabled": true
                         },
@@ -67,24 +64,16 @@
         },
         {
             "type": "Microsoft.Storage/storageAccounts/blobServices",
-            "apiVersion": "2022-09-01",
-            "name": "[concat(parameters('storageAccounts_stgpciAKSweurope001_name'), '/default')]",
+            "apiVersion": "2023-05-01",
+            "name": "[concat(parameters('storageAccounts_dsfdsfdsfdsfds_name'), '/default')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_stgpciAKSweurope001_name'))]"
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_dsfdsfdsfdsfds_name'))]"
             ],
             "sku": {
-                "name": "Standard_GRS",
+                "name": "Standard_RAGRS",
                 "tier": "Standard"
             },
             "properties": {
-                "changeFeed": {
-                    "retentionInDays": 30,
-                    "enabled": true
-                },
-                "restorePolicy": {
-                    "enabled": true,
-                    "days": 6
-                },
                 "containerDeleteRetentionPolicy": {
                     "enabled": true,
                     "days": 7
@@ -96,19 +85,18 @@
                     "allowPermanentDelete": false,
                     "enabled": true,
                     "days": 7
-                },
-                "isVersioningEnabled": true
+                }
             }
         },
         {
             "type": "Microsoft.Storage/storageAccounts/fileServices",
-            "apiVersion": "2022-09-01",
-            "name": "[concat(parameters('storageAccounts_stgpciAKSweurope001_name'), '/default')]",
+            "apiVersion": "2023-05-01",
+            "name": "[concat(parameters('storageAccounts_dsfdsfdsfdsfds_name'), '/default')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_stgpciAKSweurope001_name'))]"
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_dsfdsfdsfdsfds_name'))]"
             ],
             "sku": {
-                "name": "Standard_GRS",
+                "name": "Standard_RAGRS",
                 "tier": "Standard"
             },
             "properties": {
@@ -126,10 +114,10 @@
         },
         {
             "type": "Microsoft.Storage/storageAccounts/queueServices",
-            "apiVersion": "2022-09-01",
-            "name": "[concat(parameters('storageAccounts_stgpciAKSweurope001_name'), '/default')]",
+            "apiVersion": "2023-05-01",
+            "name": "[concat(parameters('storageAccounts_dsfdsfdsfdsfds_name'), '/default')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_stgpciAKSweurope001_name'))]"
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_dsfdsfdsfdsfds_name'))]"
             ],
             "properties": {
                 "cors": {
@@ -139,211 +127,15 @@
         },
         {
             "type": "Microsoft.Storage/storageAccounts/tableServices",
-            "apiVersion": "2022-09-01",
-            "name": "[concat(parameters('storageAccounts_stgpciAKSweurope001_name'), '/default')]",
+            "apiVersion": "2023-05-01",
+            "name": "[concat(parameters('storageAccounts_dsfdsfdsfdsfds_name'), '/default')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_stgpciAKSweurope001_name'))]"
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_dsfdsfdsfdsfds_name'))]"
             ],
             "properties": {
                 "cors": {
                     "corsRules": []
                 }
-            }
-        },
-        {
-            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
-            "apiVersion": "2022-09-01",
-            "name": "[concat(parameters('storageAccounts_stgpciAKSweurope001_name'), '/default/ci-images-folder')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_stgpciAKSweurope001_name'), 'default')]",
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_stgpciAKSweurope001_name'))]"
-            ],
-            "properties": {
-                "metadata": {}
-            }
-        },
-        {
-            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
-            "apiVersion": "2022-09-01",
-            "name": "[concat(parameters('storageAccounts_stgpciAKSweurope001_name'), '/default/ci-input-folder')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_stgpciAKSweurope001_name'), 'default')]",
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_stgpciAKSweurope001_name'))]"
-            ],
-            "properties": {
-                "metadata": {}
-            }
-        },
-        {
-            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
-            "apiVersion": "2022-09-01",
-            "name": "[concat(parameters('storageAccounts_stgpciAKSweurope001_name'), '/default/ci-ocr-folder')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_stgpciAKSweurope001_name'), 'default')]",
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_stgpciAKSweurope001_name'))]"
-            ],
-            "properties": {
-                "metadata": {}
-            }
-        },
-        {
-            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
-            "apiVersion": "2022-09-01",
-            "name": "[concat(parameters('storageAccounts_stgpciAKSweurope001_name'), '/default/document-archive')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_stgpciAKSweurope001_name'), 'default')]",
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_stgpciAKSweurope001_name'))]"
-            ],
-            "properties": {
-                "metadata": {}
-            }
-        },
-        {
-            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
-            "apiVersion": "2022-09-01",
-            "name": "[concat(parameters('storageAccounts_stgpciAKSweurope001_name'), '/default/document-images-archieve')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_stgpciAKSweurope001_name'), 'default')]",
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_stgpciAKSweurope001_name'))]"
-            ],
-            "properties": {
-                "metadata": {}
-            }
-        },
-        {
-            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
-            "apiVersion": "2022-09-01",
-            "name": "[concat(parameters('storageAccounts_stgpciAKSweurope001_name'), '/default/document-ocr-archieve')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_stgpciAKSweurope001_name'), 'default')]",
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_stgpciAKSweurope001_name'))]"
-            ],
-            "properties": {
-                "metadata": {}
-            }
-        },
-        {
-            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
-            "apiVersion": "2022-09-01",
-            "name": "[concat(parameters('storageAccounts_stgpciAKSweurope001_name'), '/default/document-raw')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_stgpciAKSweurope001_name'), 'default')]",
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_stgpciAKSweurope001_name'))]"
-            ],
-            "properties": {
-                "metadata": {}
-            }
-        },
-        {
-            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
-            "apiVersion": "2022-09-01",
-            "name": "[concat(parameters('storageAccounts_stgpciAKSweurope001_name'), '/default/document-report')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_stgpciAKSweurope001_name'), 'default')]",
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_stgpciAKSweurope001_name'))]"
-            ],
-            "properties": {
-                "metadata": {}
-            }
-        },
-        {
-            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
-            "apiVersion": "2022-09-01",
-            "name": "[concat(parameters('storageAccounts_stgpciAKSweurope001_name'), '/default/power-automate-config')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_stgpciAKSweurope001_name'), 'default')]",
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_stgpciAKSweurope001_name'))]"
-            ],
-            "properties": {
-                "metadata": {}
-            }
-        },
-        {
-            "type": "Microsoft.Storage/storageAccounts/queueServices/queues",
-            "apiVersion": "2022-09-01",
-            "name": "[concat(parameters('storageAccounts_stgpciAKSweurope001_name'), '/default/documents-queue')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts/queueServices', parameters('storageAccounts_stgpciAKSweurope001_name'), 'default')]",
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_stgpciAKSweurope001_name'))]"
-            ],
-            "properties": {
-                "metadata": {}
-            }
-        },
-        {
-            "type": "Microsoft.Storage/storageAccounts/queueServices/queues",
-            "apiVersion": "2022-09-01",
-            "name": "[concat(parameters('storageAccounts_stgpciAKSweurope001_name'), '/default/documents-status-queue')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts/queueServices', parameters('storageAccounts_stgpciAKSweurope001_name'), 'default')]",
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_stgpciAKSweurope001_name'))]"
-            ],
-            "properties": {
-                "metadata": {}
-            }
-        },
-        {
-            "type": "Microsoft.Network/privateEndpoints",
-            "apiVersion": "2022-01-01",
-            "name": "[concat(parameters('storageAccounts_stgpciAKSweurope001_name'), '-pe')]",
-            "location": "[parameters('location')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_stgpciAKSweurope001_name'))]"
-            ],
-            "properties": {
-                "subnet": {
-                    "id": "[parameters('subnet_id')]"
-                },
-                "privateLinkServiceConnections": [
-                    {
-                        "name": "[concat(parameters('storageAccounts_stgpciAKSweurope001_name'), '-pe')]",
-                        "properties": {
-                            "privateLinkServiceId": "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_stgpciAKSweurope001_name'))]",
-                            "groupIds": [
-                                "blob"
-                            ]
-                        }
-                    }
-                ]
-            }
-        },
-        {
-            "type": "Microsoft.Network/privateDnsZones",
-            "apiVersion": "2022-05-01",
-            "name": "privatelink.blob.core.windows.net",
-            "location": "global"
-        },
-        {
-            "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
-            "apiVersion": "2022-05-01",
-            "name": "[concat('privatelink.blob.core.windows.net', '/', split(parameters('virtualNetworks_vnet_goldenplatform_ci_AKSTest_weurope_001_externalid'), '/')[8])]",
-            "location": "global",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/privateDnsZones', 'privatelink.blob.core.windows.net')]"
-            ],
-            "properties": {
-                "virtualNetwork": {
-                    "id": "[parameters('virtualNetworks_vnet_goldenplatform_ci_AKSTest_weurope_001_externalid')]"
-                },
-                "registrationEnabled": false
-            }
-        },
-        {
-            "type": "Microsoft.Network/privateDnsZones/A/recordSets",
-            "apiVersion": "2022-05-01",
-            "name": "[concat('privatelink.blob.core.windows.net', '/', parameters('storageAccounts_stgpciAKSweurope001_name'))]",
-            "location": "global",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/privateDnsZones', 'privatelink.blob.core.windows.net')]",
-                "[resourceId('Microsoft.Network/privateEndpoints', concat(parameters('storageAccounts_stgpciAKSweurope001_name'), '-pe'))]"
-            ],
-            "properties": {
-                "ttl": 10,
-                "aRecords": [
-                    {
-                        "ipv4Address": "[reference(resourceId('Microsoft.Network/privateEndpoints', concat(parameters('storageAccounts_stgpciAKSweurope001_name'), '-pe'))).properties.networkInterfaces[0].properties.ipConfigurations[0].properties.privateIPAddress]"
-                    }
-                ]
             }
         }
     ]
