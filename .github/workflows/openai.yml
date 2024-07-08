@@ -7,10 +7,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  Container_Registry:
+  accountsOpenAI:
     runs-on: ubuntu-latest
-    if: ${{ vars.INFRA_STATUS_CONTAINER_REGISTER == 'YES' }}
-
+     
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
