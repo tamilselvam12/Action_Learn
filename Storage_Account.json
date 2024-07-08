@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "storageaccountname": {
-            "defaultValue": "{{.storagename}}",
+            "defaultValue": "{{.STORAGEACCOUNTNAME}}",
             "type": "String"
         },
         "storageaccountvnet": {
@@ -11,11 +11,11 @@
             "type": "String"
         },
         "subnet_id": {
-            "defaultValue": "{{.subnetid}}",
+            "defaultValue": "/subscriptions/{{.SUBSCRIPTIONSID}}/resourceGroups/{{.VNETRESOURCEGROUPNAME}}/providers/Microsoft.Network/virtualNetworks/{{.VNETNAME}}/subnets/{{.SUBNETNAME}}",
             "type": "String"
         },
         "location": {
-            "defaultValue": "{{.location}}",
+            "defaultValue": "{{.LOCATIONNAME}}",
             "type": "String"
         }
     },
