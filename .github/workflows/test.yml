@@ -70,11 +70,11 @@ jobs:
       run: |
         az login --service-principal -u ${{ secrets.SERVICE_PRINCIPAL_ID }} -p ${{ secrets.SERVICE_PRINCIPAL_KEY }} --tenant ${{ secrets.TENANT_ID }}
         deploymentName='MyDeployment'
-        sed -i "s|{{.storagename}}|${{ vars.STORAGEACCOUNT_NAME }}|" Storage_Account.json
+        sed -i "s|{{.STORAGEACCOUNTNAME}}|${{ vars.STORAGEACCOUNT_NAME }}|" Storage_Account.json
         sed -i "s|{{.SUBSCRIPTIONSID}}|${{ secrets.SUBSCRIPTIONS_ID }}|" Storage_Account.json
         sed -i "s|{{.VNETRESOURCEGROUPNAME}}|${{ vars.VNET_RESOURCEGROUP_NAME }}|" Storage_Account.json
         sed -i "s|{{.VNETNAME}}|${{ vars.VNET_NAME }}|" Storage_Account.json
         sed -i "s|{{.SUBNETNAME}}|${{ vars.SUBNET_NAME }}|" Storage_Account.json
-        sed -i "s|{{.location}}|${{ vars.LOCATION_NAME }}|" Storage_Account.json  
+        sed -i "s|{{.LOCATIONNAME}}|${{ vars.LOCATION_NAME }}|" Storage_Account.json  
         cat Storage_Account.json   
         az deployment group create --resource-group ${{ vars.RESOURCEGROUP_NAME }} --name $deploymentName --template-file Storage_Account.json        
