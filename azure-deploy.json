@@ -6,7 +6,7 @@
       "type": "Microsoft.CognitiveServices/accounts",
       "apiVersion": "2021-04-30",
       "name": "[parameters('openAIAccountName')]",
-      "location": "[resourceGroup().location]",
+      "location": "westeurope",
       "sku": {
         "name": "S0"
       },
