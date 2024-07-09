@@ -1,14 +1,14 @@
 data "azurerm_virtual_network" "base" {
-  name                = "vnet-ibms2p-dev-eastus"
-  resource_group_name = "rg-ibms2p-dev-network-eastus"
+  name                = "poc-girrajappVnet"
+  resource_group_name = "rg-i2p-offering-r3-dev-weurope-001"
 }
 
 
 resource "azurerm_subnet" "aks" {
-  name                 = "subnet-reckittaks-ci-poc-003"
-  resource_group_name  = "rg-ibms2p-dev-network-eastus"
-  address_prefixes     = ["10.51.9.112/24"]
-  virtual_network_name = "vnet-ibms2p-dev-eastus"
+  name                 = "subnet-aks-002zac"
+  resource_group_name  = "rg-i2p-offering-r3-dev-weurope-001"
+  address_prefixes     = ["10.0.2.0/24"]
+  virtual_network_name = "poc-girrajappVnet"
 }
 
 
@@ -72,7 +72,7 @@ resource "azurerm_kubernetes_cluster" "cluster" {
   tags = var.kubernetes_tags
   network_profile {
     network_plugin = "azure"
-    network_policy = "calico"
+    network_policy = "kubenet"
   }
 }
 
