@@ -23,7 +23,7 @@ jobs:
             export ARM_CLIENT_ID=${{ secrets.SERVICE_PRINCIPAL_ID }}
             export ARM_CLIENT_SECRET=${{ secrets.SERVICE_PRINCIPAL_KEY }}
             export ARM_TENANT_ID=${{ secrets.TENANT_ID }}
-            export ARM_SUBSCRIPTION_ID=$(subscriptions-name)
+            export ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}
             terraform init
             terraform plan
             terraform apply -auto-approve
