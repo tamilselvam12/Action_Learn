@@ -1,0 +1,30 @@
+name: Deploy Azure AI Document Intelligence - Form Recognizer
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Login to Azure
+      run: |
+        az login --service-principal -u ${{ secrets.SERVICE_PRINCIPAL_ID }} -p ${{ secrets.SERVICE_PRINCIPAL_KEY }} --tenant ${{ secrets.TENANT_ID }}
+      
+
+    - name: Deploy ARM template
+      uses: azure/arm-deploy@v1
+      with:
+        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: 'S2P_GitHub_PoC'
+        template: './fr-openai.json'
+        parameters: './fr-openai.parameters.json'
+
+    - name: Azure logout
+      run: az logout
