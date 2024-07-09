@@ -1,0 +1,123 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "accounts_openai_S2P_POC_westeurope_001_name": {
+            "defaultValue": "openai-S2P-POC-westeurope-001",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.CognitiveServices/accounts",
+            "apiVersion": "2024-04-01-preview",
+            "name": "[parameters('accounts_openai_S2P_POC_westeurope_001_name')]",
+            "location": "westeurope",
+            "sku": {
+                "name": "S0"
+            },
+            "kind": "OpenAI",
+            "properties": {
+                "customSubDomainName": "[parameters('accounts_openai_S2P_POC_westeurope_001_name')]",
+                "networkAcls": {
+                    "defaultAction": "Allow",
+                    "virtualNetworkRules": [],
+                    "ipRules": []
+                },
+                "publicNetworkAccess": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.CognitiveServices/accounts/deployments",
+            "apiVersion": "2024-04-01-preview",
+            "name": "[concat(parameters('accounts_openai_S2P_POC_westeurope_001_name'), '/S2POpenAiModel')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('accounts_openai_S2P_POC_westeurope_001_name'))]"
+            ],
+            "sku": {
+                "name": "Standard",
+                "capacity": 125
+            },
+            "properties": {
+                "model": {
+                    "format": "OpenAI",
+                    "name": "gpt-35-turbo",
+                    "version": "0301"
+                },
+                "versionUpgradeOption": "OnceNewDefaultVersionAvailable",
+                "currentCapacity": 125,
+                "raiPolicyName": "Microsoft.Default"
+            }
+        },
+        {
+            "type": "Microsoft.CognitiveServices/accounts/raiPolicies",
+            "apiVersion": "2024-04-01-preview",
+            "name": "[concat(parameters('accounts_openai_S2P_POC_westeurope_001_name'), '/Microsoft.Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('accounts_openai_S2P_POC_westeurope_001_name'))]"
+            ],
+            "properties": {
+                "mode": "Blocking",
+                "contentFilters": [
+                    {
+                        "name": "Hate",
+                        "allowedContentLevel": "Medium",
+                        "blocking": true,
+                        "enabled": true,
+                        "source": "Prompt"
+                    },
+                    {
+                        "name": "Hate",
+                        "allowedContentLevel": "Medium",
+                        "blocking": true,
+                        "enabled": true,
+                        "source": "Completion"
+                    },
+                    {
+                        "name": "Sexual",
+                        "allowedContentLevel": "Medium",
+                        "blocking": true,
+                        "enabled": true,
+                        "source": "Prompt"
+                    },
+                    {
+                        "name": "Sexual",
+                        "allowedContentLevel": "Medium",
+                        "blocking": true,
+                        "enabled": true,
+                        "source": "Completion"
+                    },
+                    {
+                        "name": "Violence",
+                        "allowedContentLevel": "Medium",
+                        "blocking": true,
+                        "enabled": true,
+                        "source": "Prompt"
+                    },
+                    {
+                        "name": "Violence",
+                        "allowedContentLevel": "Medium",
+                        "blocking": true,
+                        "enabled": true,
+                        "source": "Completion"
+                    },
+                    {
+                        "name": "Selfharm",
+                        "allowedContentLevel": "Medium",
+                        "blocking": true,
+                        "enabled": true,
+                        "source": "Prompt"
+                    },
+                    {
+                        "name": "Selfharm",
+                        "allowedContentLevel": "Medium",
+                        "blocking": true,
+                        "enabled": true,
+                        "source": "Completion"
+                    }
+                ]
+            }
+        }
+    ]
+}
