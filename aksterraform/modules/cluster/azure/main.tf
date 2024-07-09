@@ -1,14 +1,14 @@
 data "azurerm_virtual_network" "base" {
-  name                = "poc-girrajappVnet"
-  resource_group_name = "rg-i2p-offering-r3-dev-weurope-001"
+  name                = "vnet-aks-githubaction"
+  resource_group_name = "S2P_GitHub_PoC"
 }
 
 
 resource "azurerm_subnet" "aks" {
   name                 = "subnet-aks-002zac"
-  resource_group_name  = "rg-i2p-offering-r3-dev-weurope-001"
-  address_prefixes     = ["10.0.2.0/24"]
-  virtual_network_name = "poc-girrajappVnet"
+  resource_group_name  = "S2P_GitHub_PoC"
+  address_prefixes     = ["175.0.1.0/24"]
+  virtual_network_name = "vnet-aks-githubaction"
 }
 
 
