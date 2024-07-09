@@ -1,21 +1,30 @@
-name: ARM Template 
+name: Deploy Azure OpenAI Service
 
 on:
   push:
     branches:
-      - none
-  workflow_dispatch:
+      - main
 
 jobs:
-  accountsOpenAI:
+  deploy:
     runs-on: ubuntu-latest
-     
+
     steps:
-    - name: Checkout repository
+    - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Azure_OpenAI_Deploy
+    - name: Login to Azure
       run: |
         az login --service-principal -u ${{ secrets.SERVICE_PRINCIPAL_ID }} -p ${{ secrets.SERVICE_PRINCIPAL_KEY }} --tenant ${{ secrets.TENANT_ID }}
-        deploymentName='MyDeployment'
-        az deployment group create --resource-group 'S2P_GitHub_PoC' --name MyDeployment --template-file accountsOpenAI.json
+      
+
+    - name: Deploy ARM template
+      uses: azure/arm-deploy@v1
+      with:
+        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: 'S2P_GitHub_PoC'
+        template: './openai.json'
+        parameters: './openai.parameters.json'
+
+    - name: Azure logout
+      run: az logout
