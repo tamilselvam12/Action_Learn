@@ -1,11 +1,11 @@
 variable "tenant_id" {
   type = string
-  default = "95e66ecc-f2c2-464b-84d9-8fda407bc923"
+  default = "95917aa5-d840-4443-a19e-aa3ad09d4bb5"
 }
 
 variable "subscription_id" {
   type = string
-  default = "6523272d-1e2f-4a46-ada4-1a202e3addd9"
+  default = "d6233897-5c9f-47f9-8507-6d4ada2d5183"
 }
 
 variable "location" {
@@ -15,7 +15,7 @@ variable "location" {
 
 variable "resource_group_name" {
   type = string
-  default = "rg-ibms2p-dev-ci-eastus"
+  default = "S2P_GitHub_PoC"
 }
 
 
@@ -27,32 +27,32 @@ variable "cluster_vm_size" {
 
 variable "cluster_name_prefix" {
   type = string
-  default = "reckitt"
+  default = "zac002"
 }
 
 variable "identifier_uris" {
   type = string
-  default = "api://reckitt-dev-weurope-001-uri"
+  default = "api://zac002-dev-eastus-001-uri"
 }
 
 variable "azuread_application_name" {
   type = string
-  default = "reckitt-dev-weurope-001-uri-ci"
+  default = "zac002-dev-eastus-001-uri-ci"
 }
 
 variable "identifier_uris_dataengine" {
   type = string
-  default = "api://reckitt-dev-weurope-001-uri-dataengine"
+  default = "api://zac002-dev-eastus-001-uri-dataengine"
 }
 
 variable "azuread_application_name_dataengine" {
   type = string
-  default = "reckitt-dev-weurope-001-uri-ci-dataengine"
+  default = "zac002-dev-eastus-001-uri-ci-dataengine"
 }
 
 variable "ingress_hostname_prefix" {
   type = string
-  default = "reckitt_dev_dev_ingress"
+  default = "zac002_dev_ingress"
 }
 variable "storage_class_name" {
   type = string
