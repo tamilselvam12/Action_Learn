@@ -1,0 +1,35 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "accounts_fr_ci_S2P_POC_westeurope_03_name": {
+            "defaultValue": "fr-ci-S2P-POC-westeurope-03",
+            "type": "String"
+        }
+        
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.CognitiveServices/accounts",
+            "apiVersion": "2024-04-01-preview",
+            "name": "[parameters('accounts_fr_ci_S2P_POC_westeurope_03_name')]",
+            "location": "westeurope",
+            "sku": {
+                "name": "S0"
+            },
+            "kind": "FormRecognizer",
+            "identity": {
+                "type": "None"
+            },
+            "properties": {
+                "customSubDomainName": "[parameters('accounts_fr_ci_S2P_POC_westeurope_03_name')]",
+                "networkAcls": {
+                    "defaultAction": "Allow"                    
+                    
+                },
+                "publicNetworkAccess": "Enabled"
+            }
+        }
+    ]
+}
