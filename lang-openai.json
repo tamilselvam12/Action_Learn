@@ -1,0 +1,36 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "accounts_lg_iwi2p_ci_S2P_POC_westeurope_03_name": {
+            "defaultValue": "lg-iwi2p-ci-S2P-POC-westeurope-03",
+            "type": "String"
+        }
+        
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.CognitiveServices/accounts",
+            "apiVersion": "2024-04-01-preview",
+            "name": "[parameters('accounts_lg_iwi2p_ci_S2P_POC_westeurope_03_name')]",
+            "location": "westeurope",
+            "sku": {
+                "name": "S"
+            },
+            "kind": "TextAnalytics",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "apiProperties": {},
+                "customSubDomainName": "[parameters('accounts_lg_iwi2p_ci_S2P_POC_westeurope_03_name')]",
+                "networkAcls": {
+                    "defaultAction": "Allow"                    
+                    
+                },
+                "publicNetworkAccess": "Enabled"
+            }
+        }
+    ]
+}
