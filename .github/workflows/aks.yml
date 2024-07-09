@@ -1,0 +1,23 @@
+name: ARM Template 
+
+on:
+  push:
+    branches:
+      - none
+  workflow_dispatch:
+
+jobs:
+  AKS:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: AKS_Install
+      run: |
+        az login --service-principal -u ${{ secrets.SERVICE_PRINCIPAL_ID }} -p ${{ secrets.SERVICE_PRINCIPAL_KEY }} --tenant ${{ secrets.TENANT_ID }}
+        deploymentName='MyDeployment'
+        terraform init
+        terraform plan
+        terraform apply
