@@ -72,7 +72,7 @@ resource "azurerm_kubernetes_cluster" "cluster" {
   tags = var.kubernetes_tags
   network_profile {
     network_plugin = "azure"
-    network_policy = "kubenet"
+    network_policy = "calico"
   }
 }
 
