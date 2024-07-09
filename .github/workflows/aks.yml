@@ -18,7 +18,12 @@ jobs:
       run: |
         az login --service-principal -u ${{ secrets.SERVICE_PRINCIPAL_ID }} -p ${{ secrets.SERVICE_PRINCIPAL_KEY }} --tenant ${{ secrets.TENANT_ID }}
         deploymentName='MyDeployment'
-        cd aksterraform/environments/azure
-        terraform init
-        terraform plan
-        terraform apply
+            cd aksterraform/environments/azure
+            ls
+            export ARM_CLIENT_ID=${{ secrets.SERVICE_PRINCIPAL_ID }}
+            export ARM_CLIENT_SECRET=${{ secrets.SERVICE_PRINCIPAL_KEY }}
+            export ARM_TENANT_ID=${{ secrets.TENANT_ID }}
+            export ARM_SUBSCRIPTION_ID=$(subscriptions-name)
+            terraform init
+            terraform plan
+            terraform apply -auto-approve
