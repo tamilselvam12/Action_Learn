@@ -1,0 +1,88 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}
+  labels:
+    {{- include "helper.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "helper.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "helper.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          env:
+            - name: DB_ADDR
+              value: {{ .Chart.Name }}-postgres
+            - name: DB_DATABASE
+              value: keycloak
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_SCHEMA
+              value: public
+            - name: DB_VENDOR
+              value: POSTGRES
+            {{- if eq .Values.createDefaultRealm "true"}}
+            - name: KEYCLOAK_IMPORT
+              value: /import/keycloak-import.json
+            {{- end }}
+            - name: PROXY_ADDRESS_FORWARDING
+              value: "true"
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Chart.Name }}-db-secret
+                  key: username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Chart.Name }}-db-secret
+                  key: password
+            - name: KEYCLOAK_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Chart.Name }}-secret
+                  key: username
+            - name: KEYCLOAK_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Chart.Name }}-secret
+                  key: password      
+          image: "jboss/keycloak:5.0.0"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.targetPort }}
+          livenessProbe:
+            httpGet:
+              path: /auth/
+              port: http
+            initialDelaySeconds: 120
+            periodSeconds: 20
+            failureThreshold: 5
+          readinessProbe:
+            httpGet:
+              path: /auth/
+              port: http
+            initialDelaySeconds: 120
+            periodSeconds: 10
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- if eq .Values.createDefaultRealm "true"}}
+          volumeMounts:
+            - mountPath: /import/keycloak-import.json
+              name: import-json
+              subPath: keycloak-import.json
+          {{- end }}        
+      restartPolicy: Always
+      {{- if eq .Values.createDefaultRealm "true"}}
+      volumes:
+        - name: import-json
+          configMap:
+            name: {{ .Chart.Name }}-import-json
+      {{- end }}

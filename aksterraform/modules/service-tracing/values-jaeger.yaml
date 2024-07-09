@@ -1,0 +1,14 @@
+jaeger:
+  create: true
+  # namespace where Jaeger resource should be created default to .Release.Namespace
+  namespace:
+  spec:
+    agent:
+      strategy: DaemonSet
+    ingress:
+      enabled: false
+    storage:
+      type: elasticsearch
+      options:
+        es:
+          server-urls: http://logging-elasticsearch:9200

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Chart.Name }}-postgres
+  labels:
+    {{- include "helper.labels" . | nindent 4 }}
+spec:
+  ports:
+    - port: {{ .Values.service.portDb }}
+      targetPort: {{ .Values.service.targetPortDb }}
+      protocol: TCP
+      name: "dbport"
+  selector:
+    {{- include "helper.selectorLabelsDb" . | nindent 4 }}

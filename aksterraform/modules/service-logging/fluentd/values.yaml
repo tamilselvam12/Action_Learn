@@ -1,0 +1,3 @@
+# set to 'ibmcloud' when deploying on IBM Cloud, since additional path needs to be mounted
+cloud_provider: "default"
+namespace: "infrastructure"

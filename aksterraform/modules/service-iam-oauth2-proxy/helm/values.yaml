@@ -1,0 +1,32 @@
+deploymentName: oauth2-proxy
+replicaCount: 1
+resources: {}
+configYaml: ""
+image:
+  pullPolicy: IfNotPresent
+
+service:
+  port: 4180
+  targetPort: 4180
+
+global:
+  imagePullSecrets: []
+
+OAUTH2_PROXY_PROVIDER: "keycloak"
+#OAUTH2_PROXY_CLIENT_ID: "97fb1030-5194-4010-bf93-aa4d5e6001c8"
+OAUTH2_PROXY_CLIENT_ID: "docin"
+
+#OAUTH2_PROXY_CLIENT_SECRET: "7CHZ5FXYjn8.9-GxotI9QQft2-Xs.631Hd"
+OAUTH2_PROXY_CLIENT_SECRET: "changeme"
+
+OAUTH2_PROXY_COOKIE_SECRET: "It+NoQkoBeiiucdZFM+ttg=="
+
+OAUTH2_PROXY_HTTP_ADDRESS: "0.0.0.0:4180"
+
+#http_application_routing_zone_name: "e266c046c89146eca6ff.switzerlandnorth.aksapp.io"
+http_application_routing_zone_name: "changeme"
+hostname_prefix: "luw-ingress"
+
+## Azure provider specific
+#OAUTH2_PROXY_AZURE_TENANT: "c0909704-f485-48b2-9190-c27a0baa6228"
+OAUTH2_PROXY_AZURE_TENANT: "changeme"

@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}
+  labels:
+    {{- include "helper.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "helper.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "helper.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          args:
+          - --email-domain=*
+          {{- if eq .Values.OAUTH2_PROXY_PROVIDER "keycloak" }}
+          - --pass-access-token=true
+          - --skip-jwt-bearer-tokens=true
+          - --oidc-issuer-url=https://{{ .Values.hostname_prefix }}.{{ .Values.http_application_routing_zone_name }}/auth/realms/docin
+          - --extra-jwt-issuers=https://{{ .Values.hostname_prefix }}.{{ .Values.http_application_routing_zone_name }}/auth/realms/docin=docin
+          - --oidc-jwks-url=https://{{ .Values.hostname_prefix }}.{{ .Values.http_application_routing_zone_name }}/auth/realms/docin/protocol/openid-connect/certs
+          {{- end }}
+          env:
+            - name: OAUTH2_PROXY_PROVIDER
+              value: {{ .Values.OAUTH2_PROXY_PROVIDER }}
+            {{- if eq .Values.OAUTH2_PROXY_PROVIDER "azure" }}
+            - name: OAUTH2_PROXY_AZURE_TENANT
+              value: {{ .Values.OAUTH2_PROXY_AZURE_TENANT }}
+            {{- end }}
+            {{- if eq .Values.OAUTH2_PROXY_PROVIDER "keycloak" }}
+            - name: OAUTH2_PROXY_SSL_INSECURE_SKIP_VERIFY
+              value: "true"
+            - name: OAUTH2_PROXY_LOGIN_URL
+              value: https://{{ .Values.hostname_prefix }}.{{ .Values.http_application_routing_zone_name }}/auth/realms/docin/protocol/openid-connect/auth
+            - name: OAUTH2_PROXY_REDEEM_URL
+              value: https://{{ .Values.hostname_prefix }}.{{ .Values.http_application_routing_zone_name }}/auth/realms/docin/protocol/openid-connect/token
+            - name: OAUTH2_PROXY_VALIDATE_URL
+              value: https://{{ .Values.hostname_prefix }}.{{ .Values.http_application_routing_zone_name }}/auth/realms/docin/protocol/openid-connect/userinfo  
+            {{- end }}
+            - name: OAUTH2_PROXY_CLIENT_ID
+              value: {{ .Values.OAUTH2_PROXY_CLIENT_ID }}
+            - name: OAUTH2_PROXY_CLIENT_SECRET
+              value: {{ .Values.OAUTH2_PROXY_CLIENT_SECRET }}
+            - name: OAUTH2_PROXY_COOKIE_SECRET
+              value: {{ .Values.OAUTH2_PROXY_COOKIE_SECRET }}
+            - name: OAUTH2_PROXY_HTTP_ADDRESS
+              value: {{ .Values.OAUTH2_PROXY_HTTP_ADDRESS }}
+            - name: OAUTH2_PROXY_UPSTREAM
+              value: "https://{{ .Values.hostname_prefix }}.{{ .Values.http_application_routing_zone_name }}"
+          image: bitnami/oauth2-proxy:7.0.1
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.targetPort }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      restartPolicy: Always

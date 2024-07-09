@@ -1,0 +1,101 @@
+{{- if eq .Values.createDefaultRealm "true"}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Chart.Name }}-import-json
+  labels:
+    {{- include "helper.labels" . | nindent 4 }}
+data:
+  keycloak-import.json: |
+    {
+      "id": "docin",
+      "realm": "docin",
+      "displayName": "Document Intelligence Platform",
+      "enabled": true,
+      "internationalizationEnabled": true,
+      "supportedLocales": [
+      "de",
+      "en",
+      "it",
+      "fr"
+      ],
+      "defaultLocale": "de",
+      "requiredCredentials": [
+      "password"
+      ],
+      "passwordPolicy": "length(8) and digits(1) and upperCase(1) and lowerCase(1) and passwordHistory(999) and forceExpiredPasswordChange(30)",
+      "roles": {
+      "realm": [
+        {
+        "name": "docin-user",
+        "composite": false,
+        "clientRole": false,
+        "attributes": {}
+        },
+        {
+        "name": "docin-admin",
+        "composite": true,
+        "composites": {
+          "client": {
+          "realm-management": [
+            "manage-users",
+            "view-users"
+          ]
+          }
+        },
+        "clientRole": false,
+        "attributes": {}
+        }
+      ]
+      },
+      "groups": [
+      {
+        "name": "docin-users",
+        "path": "/docin-users",
+        "attributes": {},
+        "realmRoles": [
+        "docin-user"
+        ],
+        "clientRoles": {},
+        "subGroups": []
+      }
+      ],
+      "users": [
+      {
+        "username": "{{ .Values.secrets.DEFUALT_APP_USERNAME}}",
+        "enabled": true,
+        "firstName": "Firstname",
+        "lastName": "Lastname",
+        "email": "docin-user@test.com",
+        "credentials": [
+        {
+          "type": "password",
+          "value": "{{ .Values.secrets.DEFUALT_APP_PASSWORD}}"
+        }
+        ],
+        "requiredActions": [],
+        "clientRoles": {
+        "account": [
+          "manage-account",
+          "view-profile"
+        ]
+        },
+        "groups": [
+        "/docin-users"
+        ]
+      }
+      ],
+      "clients": [
+      {
+        "clientId": "docin",
+        "enabled": true,
+        "redirectUris": ["*"],
+        "webOrigins": ["*"],
+        "standardFlowEnabled": true,
+        "implicitFlowEnabled": false,
+        "directAccessGrantsEnabled": true,
+        "publicClient": true
+      }
+      ]
+    }
+{{- end }}

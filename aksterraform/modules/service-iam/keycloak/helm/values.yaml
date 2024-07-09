@@ -1,0 +1,29 @@
+deploymentName: service-keycloak
+createDefaultRealm: "true"
+persistent_volume_name: ""
+image:
+  pullPolicy: IfNotPresent
+
+replicaCount: 1
+resources: {}
+storageClassName: default
+
+service:
+  port: 9010
+  targetPort: 8080
+  portDb: 5432
+  targetPortDb: 5432
+ 
+secrets:
+  POSTGRES_USER: "admin"
+  POSTGRES_PASSWORD: "changeit"
+  KEYCLOAK_USER: "admin"
+  KEYCLOAK_PASSWORD: "changeit"
+  DEFUALT_APP_USERNAME: "docin-user"
+  DEFUALT_APP_PASSWORD: "Pa55w0rd"
+  
+http_application_routing_zone_name: "e266c046c89146eca6ff.switzerlandnorth.aksapp.io"
+hostname_prefix: "keycloak"
+# 'addon-http-application-routing' for Azure
+# 'public-iks-k8s-nginx' for IBM cloud
+ingress_class: "addon-http-application-routing"

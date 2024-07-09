@@ -1,0 +1,5 @@
+http_application_routing_zone_name: "e266c046c89146eca6ff.switzerlandnorth.aksapp.io"
+hostname_prefix: "grafana"
+# 'addon-http-application-routing' for Azure
+# 'public-iks-k8s-nginx' for IBM cloud
+ingress_class: "addon-http-application-routing"
