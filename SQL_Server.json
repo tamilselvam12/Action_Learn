@@ -22,7 +22,7 @@
         },
         "administratorLoginPassword": {
             "type": "SecureString",
-            "defaultValue": "{{.SQLPASSWORDNAME}}!",
+            "defaultValue": "{{.SQLPASSWORDNAME}}",
             "metadata": {
                 "description": "Administrator password for the SQL server."
             }
