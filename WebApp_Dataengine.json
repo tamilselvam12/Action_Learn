@@ -3,21 +3,21 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "myAppServicePlan_name": {
-	    "defaultValue": "{{.appserviceplanname}}", 
+	    "defaultValue": "{{.SERVICEPLANNAME}}", 
             "type": "string",
             "metadata": {
                 "description": "Name of the App Service Plan"
             }
         },
         "location": {
-	    "defaultValue": "{{.location}}", 
+	    "defaultValue": "{{.LOCATIONNAME}}", 
             "type": "string",
             "metadata": {
                 "description": "Location for the resources"
             }
         },
 	"myDataEngineAppService_name": {
-	    "defaultValue": "{{.dataengineappname}}", 
+	    "defaultValue": "{{.DATAENGINEWEBAPPNAME}}", 
             "type": "string",
             "metadata": {
                 "description": "Name of the App Service"
