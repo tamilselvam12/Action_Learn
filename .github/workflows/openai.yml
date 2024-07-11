@@ -3,7 +3,7 @@ name: Deploy Azure OpenAI Service
 on:
   push:
     branches:
-      - main
+      - none
 
 jobs:
   deploy:
