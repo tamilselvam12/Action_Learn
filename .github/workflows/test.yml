@@ -58,9 +58,29 @@ jobs:
   #       cat KeyVaultPrivateEndPoint.json
   #       az deployment group create --resource-group S2P_GitHub_PoC --name MyDeployment --template-file KeyVaultPrivateEndPoint.json
 
-  Storage_Accounnt:
+  # Storage_Accounnt:
+  #   runs-on: ubuntu-latest
+  #   if: ${{ vars.INFRA_STATUS_STORAGEACCOUNT == 'YES' }}
+
+  #   steps:
+  #   - name: Checkout repository
+  #     uses: actions/checkout@v2
+
+  #   - name: Container_Registry_Install
+  #     run: |
+  #       az login --service-principal -u ${{ secrets.SERVICE_PRINCIPAL_ID }} -p ${{ secrets.SERVICE_PRINCIPAL_KEY }} --tenant ${{ secrets.TENANT_ID }}
+  #       deploymentName='MyDeployment'
+  #       sed -i "s|{{.STORAGEACCOUNTNAME}}|${{ vars.STORAGEACCOUNT_NAME }}|" Storage_Account.json
+  #       sed -i "s|{{.SUBSCRIPTIONSID}}|${{ secrets.SUBSCRIPTIONS_ID }}|" Storage_Account.json
+  #       sed -i "s|{{.VNETRESOURCEGROUPNAME}}|${{ vars.VNET_RESOURCEGROUP_NAME }}|" Storage_Account.json
+  #       sed -i "s|{{.VNETNAME}}|${{ vars.VNET_NAME }}|" Storage_Account.json
+  #       sed -i "s|{{.SUBNETNAME}}|${{ vars.SUBNET_NAME }}|" Storage_Account.json
+  #       sed -i "s|{{.LOCATIONNAME}}|${{ vars.LOCATION_NAME }}|" Storage_Account.json  
+  #       cat Storage_Account.json   
+  #       az deployment group create --resource-group ${{ vars.RESOURCEGROUP_NAME }} --name $deploymentName --template-file Storage_Account.json  
+  AppServicePlan:
     runs-on: ubuntu-latest
-    if: ${{ vars.INFRA_STATUS_STORAGEACCOUNT == 'YES' }}
+    if: ${{ vars.INFRA_STATUS_APPSERVICEPLAN == 'YES' }}
 
     steps:
     - name: Checkout repository
@@ -70,11 +90,8 @@ jobs:
       run: |
         az login --service-principal -u ${{ secrets.SERVICE_PRINCIPAL_ID }} -p ${{ secrets.SERVICE_PRINCIPAL_KEY }} --tenant ${{ secrets.TENANT_ID }}
         deploymentName='MyDeployment'
-        sed -i "s|{{.STORAGEACCOUNTNAME}}|${{ vars.STORAGEACCOUNT_NAME }}|" Storage_Account.json
-        sed -i "s|{{.SUBSCRIPTIONSID}}|${{ secrets.SUBSCRIPTIONS_ID }}|" Storage_Account.json
-        sed -i "s|{{.VNETRESOURCEGROUPNAME}}|${{ vars.VNET_RESOURCEGROUP_NAME }}|" Storage_Account.json
-        sed -i "s|{{.VNETNAME}}|${{ vars.VNET_NAME }}|" Storage_Account.json
-        sed -i "s|{{.SUBNETNAME}}|${{ vars.SUBNET_NAME }}|" Storage_Account.json
-        sed -i "s|{{.LOCATIONNAME}}|${{ vars.LOCATION_NAME }}|" Storage_Account.json  
-        cat Storage_Account.json   
-        az deployment group create --resource-group ${{ vars.RESOURCEGROUP_NAME }} --name $deploymentName --template-file Storage_Account.json        
+        sed -i "s|{{.SERVICEPLANNAME}}|${{ vars.LOCATION_NAME }}|" App_Service_Plan.json
+        sed -i "s|{{.LOCATIONNAME}}|${{ vars.LOCATION_NAME }}|" App_Service_Plan.json
+        sed -i "s|{{.SPSIZENAME}}|${{ vars.SPSIZE_NAME}}|" App_Service_Plan.json 
+        cat App_Service_Plan.json  
+        az deployment group create --resource-group ${{ vars.RESOURCEGROUP_NAME }} --name $deploymentName --template-file App_Service_Plan.json 
