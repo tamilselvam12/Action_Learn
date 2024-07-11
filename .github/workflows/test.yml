@@ -90,7 +90,7 @@ jobs:
       run: |
         az login --service-principal -u ${{ secrets.SERVICE_PRINCIPAL_ID }} -p ${{ secrets.SERVICE_PRINCIPAL_KEY }} --tenant ${{ secrets.TENANT_ID }}
         deploymentName='MyDeployment'
-        sed -i "s|{{.SERVICEPLANNAME}}|${{ vars.LOCATION_NAME }}|" App_Service_Plan.json
+        sed -i "s|{{.SERVICEPLANNAME}}|${{ vars.SERVICEPLAN_NAME }}|" App_Service_Plan.json
         sed -i "s|{{.LOCATIONNAME}}|${{ vars.LOCATION_NAME }}|" App_Service_Plan.json
         sed -i "s|{{.SPSIZENAME}}|${{ vars.SPSIZE_NAME}}|" App_Service_Plan.json 
         cat App_Service_Plan.json  
