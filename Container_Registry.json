@@ -2,21 +2,9 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "registries_s2ppoc_name": {
+        "containerregistryname": {
             "defaultValue": "{{.CONTAINERREGISTERNAME}}",
             "type": "String"
-        },
-        "location": {
-            "defaultValue": "{{.LOCATIONNAME}}",
-            "type": "String"
-        },
-        "vnetName": {
-            "type": "String",
-            "defaultValue": "/subscriptions/{{.SUBSCRIPTIONSID}}/resourceGroups/{{.VNETRESOURCEGROUPNAME}}/providers/Microsoft.Network/virtualNetworks/{{.VNETNAME}}"
-        },
-        "privateDnsZoneName": {
-            "type": "String",
-            "defaultValue": "privatednsNamepoctestaaaa"
         }
     },
     "variables": {},
@@ -24,8 +12,8 @@
         {
             "type": "Microsoft.ContainerRegistry/registries",
             "apiVersion": "2023-11-01-preview",
-            "name": "[parameters('registries_s2ppoc_name')]",
-            "location": "[parameters('location')]",
+            "name": "[parameters('containerregistryname')]",
+            "location": "{{.LOCATIONNAME}}",
             "sku": {
                 "name": "Standard",
                 "tier": "Standard"
@@ -69,9 +57,9 @@
         {
             "type": "Microsoft.ContainerRegistry/registries/scopeMaps",
             "apiVersion": "2023-11-01-preview",
-            "name": "[concat(parameters('registries_s2ppoc_name'), '/_repositories_admin')]",
+            "name": "[concat(parameters('containerregistryname'), '/_repositories_admin')]",
             "dependsOn": [
-                "[resourceId('Microsoft.ContainerRegistry/registries', parameters('registries_s2ppoc_name'))]"
+                "[resourceId('Microsoft.ContainerRegistry/registries', parameters('containerregistryname'))]"
             ],
             "properties": {
                 "description": "Can perform all read, write and delete operations on the registry",
@@ -87,9 +75,9 @@
         {
             "type": "Microsoft.ContainerRegistry/registries/scopeMaps",
             "apiVersion": "2023-11-01-preview",
-            "name": "[concat(parameters('registries_s2ppoc_name'), '/_repositories_pull')]",
+            "name": "[concat(parameters('containerregistryname'), '/_repositories_pull')]",
             "dependsOn": [
-                "[resourceId('Microsoft.ContainerRegistry/registries', parameters('registries_s2ppoc_name'))]"
+                "[resourceId('Microsoft.ContainerRegistry/registries', parameters('containerregistryname'))]"
             ],
             "properties": {
                 "description": "Can pull any repository of the registry",
@@ -101,9 +89,9 @@
         {
             "type": "Microsoft.ContainerRegistry/registries/scopeMaps",
             "apiVersion": "2023-11-01-preview",
-            "name": "[concat(parameters('registries_s2ppoc_name'), '/_repositories_pull_metadata_read')]",
+            "name": "[concat(parameters('containerregistryname'), '/_repositories_pull_metadata_read')]",
             "dependsOn": [
-                "[resourceId('Microsoft.ContainerRegistry/registries', parameters('registries_s2ppoc_name'))]"
+                "[resourceId('Microsoft.ContainerRegistry/registries', parameters('containerregistryname'))]"
             ],
             "properties": {
                 "description": "Can perform all read operations on the registry",
@@ -116,9 +104,9 @@
         {
             "type": "Microsoft.ContainerRegistry/registries/scopeMaps",
             "apiVersion": "2023-11-01-preview",
-            "name": "[concat(parameters('registries_s2ppoc_name'), '/_repositories_push')]",
+            "name": "[concat(parameters('containerregistryname'), '/_repositories_push')]",
             "dependsOn": [
-                "[resourceId('Microsoft.ContainerRegistry/registries', parameters('registries_s2ppoc_name'))]"
+                "[resourceId('Microsoft.ContainerRegistry/registries', parameters('containerregistryname'))]"
             ],
             "properties": {
                 "description": "Can push to any repository of the registry",
@@ -131,9 +119,9 @@
         {
             "type": "Microsoft.ContainerRegistry/registries/scopeMaps",
             "apiVersion": "2023-11-01-preview",
-            "name": "[concat(parameters('registries_s2ppoc_name'), '/_repositories_push_metadata_write')]",
+            "name": "[concat(parameters('containerregistryname'), '/_repositories_push_metadata_write')]",
             "dependsOn": [
-                "[resourceId('Microsoft.ContainerRegistry/registries', parameters('registries_s2ppoc_name'))]"
+                "[resourceId('Microsoft.ContainerRegistry/registries', parameters('containerregistryname'))]"
             ],
             "properties": {
                 "description": "Can perform all read and write operations on the registry",
@@ -143,46 +131,6 @@
                     "repositories/*/content/read",
                     "repositories/*/content/write"
                 ]
-            }
-        },
-        {
-            "type": "Microsoft.Network/privateEndpoints",
-            "apiVersion": "2021-05-01",
-            "name": "[concat(parameters('registries_s2ppoc_name'), '-pe')]",
-            "location": "[parameters('location')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.ContainerRegistry/registries', parameters('registries_s2ppoc_name'))]"
-            ],
-            "properties": {
-                "subnet": {
-                    "id": "[concat(parameters('vnetName'), '/subnets/{{.SUBNETNAME}}')]"
-                },
-                "privateLinkServiceConnections": [
-                    {
-                        "name": "[concat(parameters('registries_s2ppoc_name'), '-pe-connection')]",
-                        "properties": {
-                            "privateLinkServiceId": "[resourceId('Microsoft.ContainerRegistry/registries', parameters('registries_s2ppoc_name'))]",
-                            "groupIds": [
-                                "registry"
-                            ]
-                        }
-                    }
-                ]
-            }
-        },
-        {
-            "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
-            "apiVersion": "2018-09-01",
-            "name": "[concat(parameters('privateDnsZoneName'), '/', parameters('registries_s2ppoc_name'), '-vnet-link')]",
-            "location": "global",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/privateEndpoints', concat(parameters('registries_s2ppoc_name'), '-pe'))]"
-            ],
-            "properties": {
-                "virtualNetwork": {
-                    "id": "[resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName'))]"
-                },
-                "registrationEnabled": false
             }
         }
     ]
