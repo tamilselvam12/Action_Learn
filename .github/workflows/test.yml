@@ -95,7 +95,7 @@ jobs:
   #       sed -i "s|{{.SPSIZENAME}}|${{ vars.SPSIZE_NAME}}|" App_Service_Plan.json 
   #       cat App_Service_Plan.json  
   #       az deployment group create --resource-group ${{ vars.RESOURCEGROUP_NAME }} --name $deploymentName --template-file App_Service_Plan.json 
-  WebAppN:
+  WebApp:
     runs-on: ubuntu-latest
     if: ${{ vars.INFRA_STATUS_WEBAPP == 'YES' }}
 
