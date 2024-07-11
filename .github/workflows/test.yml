@@ -144,7 +144,7 @@ jobs:
         sed -i "s|{{.SQLSERVERNAME}}|${{ vars.SERVICEPLAN_NAME }}|" SQL_Server.json
         sed -i "s|{{.SQLDATABASENAME}}|${{ vars.SQLDATABASE_NAME}}|" SQL_Server.json
         sed -i "s|{{.SQLUSERNAME}}|${{ vars.SQLUSER_NAME}}|" SQL_Server.json
-        sed -i "s|{{.SQLPASSWORDNAME}}|${{ vars.SQLPASSWORDNAME}}|" SQL_Server.json
+        sed -i "s|{{.SQLPASSWORDNAME}}|${{ vars.SQLPASSWORD_NAME}}|" SQL_Server.json
         sed -i "s|{{.LOCATIONNAME}}|${{ vars.LOCATION_NAME }}|" SQL_Server.json
         cat SQL_Server.json
         az deployment group create --resource-group ${{ vars.RESOURCEGROUP_NAME }} --name $deploymentName --template-file SQL_Server.json
