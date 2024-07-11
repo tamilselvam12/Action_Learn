@@ -1,0 +1,54 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "myAppServicePlan_name": {
+			"defaultValue": "{{.SERVICEPLANNAME}}", 
+            "type": "string",
+            "metadata": {
+                "description": "Name of the App Service Plan"
+            }
+        },
+        "location": {
+			"defaultValue": "{{.LOCATIONNAME}}", 
+            "type": "string",
+            "metadata": {
+                "description": "Location for the resources"
+            }
+        },
+        "skuName": {
+			"defaultValue": "{{.SPSIZE}}", 
+            "type": "string",
+            "metadata": {
+                "description": "SKU for the App Service Plan"
+            }
+        }
+    },
+    "variables": {
+        "appServicePlanResourceId": "[resourceId('Microsoft.Web/serverfarms', parameters('myAppServicePlan_name'))]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2023-01-01",
+            "name": "[parameters('myAppServicePlan_name')]",
+            "location": "[parameters('location')]",
+            "sku": {
+                "name": "[parameters('skuName')]"
+            },
+            "kind": "linux",
+            "properties": {
+                "perSiteScaling": false,
+                "elasticScaleEnabled": false,
+                "maximumElasticWorkerCount": 1,
+                "isSpot": false,
+                "reserved": true,
+                "isXenon": false,
+                "hyperV": false,
+                "targetWorkerCount": 0,
+                "targetWorkerSizeId": 0,
+                "zoneRedundant": false
+            }
+        }
+    ]
+}
