@@ -1,0 +1,79 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "mySQLServer_name": {
+            "defaultValue": "{{.SQLSERVERNAME}}",
+            "type": "String"
+        },
+        "databaseName": {
+            "type": "String",
+            "defaultValue": "{{.SQLDATABASENAME}}",
+            "metadata": {
+                "description": "Name of the database."
+            }
+        },
+        "administratorLogin": {
+            "type": "String",
+            "defaultValue": "{{.SQLUSERNAME}}",
+            "metadata": {
+                "description": "Administrator username for the SQL server."
+            }
+        },
+        "administratorLoginPassword": {
+            "type": "SecureString",
+            "defaultValue": "{{.SQLPASSWORDNAME}}!",
+            "metadata": {
+                "description": "Administrator password for the SQL server."
+            }
+        },
+        "location": {
+            "type": "String",
+            "defaultValue": "{{.LOCATIONNAME}}",
+            "metadata": {
+                "description": "Location for the SQL server and database resources."
+            }
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Sql/servers",
+            "apiVersion": "2022-08-01-preview",
+            "name": "[parameters('mySQLServer_name')]",
+            "location": "[parameters('location')]",
+            "kind": "v12.0",
+            "properties": {
+                "administratorLogin": "[parameters('administratorLogin')]",
+                "administratorLoginPassword": "[parameters('administratorLoginPassword')]",
+                "version": "12.0",
+                "publicNetworkAccess": "Enabled",
+                "restrictOutboundNetworkAccess": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases",
+            "apiVersion": "2023-08-01-preview",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('mySQLServer_name'))]"
+            ],
+            "name": "[concat(parameters('mySQLServer_name'), '/', parameters('databaseName'))]",
+            "location": "[parameters('location')]",
+            "sku": {
+                "name": "Standard",
+                "tier": "Standard",
+                "capacity": 100
+            },
+            "kind": "v12.0,user",
+            "properties": {
+                "collation": "SQL_Latin1_General_CP1_CI_AS",
+                "maxSizeBytes": 32212254720,
+                "catalogCollation": "SQL_Latin1_General_CP1_CI_AS",
+                "zoneRedundant": false,
+                "readScale": "Disabled",
+                "requestedBackupStorageRedundancy": "Zone",
+                "isLedgerOn": false
+            }
+        }
+    ]
+}
