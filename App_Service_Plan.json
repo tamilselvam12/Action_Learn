@@ -17,7 +17,7 @@
             }
         },
         "skuName": {
-			"defaultValue": "{{.SPSIZE}}", 
+			"defaultValue": "{{.SPSIZENAME}}", 
             "type": "string",
             "metadata": {
                 "description": "SKU for the App Service Plan"
