@@ -11,7 +11,7 @@
             "type": "String"
         },
         "vnetName": {
-            "defaultValue": "{{.VNETNAME}}",
+            "defaultValue": "/subscriptions/{{.SUBSCRIPTIONSID}}/resourceGroups/{{.VNETRESOURCEGROUPNAME}}/providers/Microsoft.Network/virtualNetworks/{{.VNETNAME}}",
             "type": "String"
         },
         "subnetName": {
