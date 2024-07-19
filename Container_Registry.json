@@ -5,6 +5,22 @@
         "containerregistryname": {
             "defaultValue": "{{.CONTAINERREGISTERNAME}}",
             "type": "String"
+        },
+        "location": {
+            "defaultValue": "{{.LOCATIONNAME}}",
+            "type": "String"
+        },
+        "vnetName": {
+            "defaultValue": "{{.VNETNAME}}",
+            "type": "String"
+        },
+        "subnetName": {
+            "defaultValue": "{{.SUBNETNAME}}",
+            "type": "String"
+        },
+        "privateDnsZoneName": {
+            "defaultValue": "privatelink.azurecr.io",
+            "type": "String"
         }
     },
     "variables": {},
@@ -13,10 +29,10 @@
             "type": "Microsoft.ContainerRegistry/registries",
             "apiVersion": "2023-11-01-preview",
             "name": "[parameters('containerregistryname')]",
-            "location": "{{.LOCATIONNAME}}",
+            "location": "[parameters('location')]",
             "sku": {
-                "name": "Standard",
-                "tier": "Standard"
+                "name": "Premium",
+                "tier": "Premium"
             },
             "properties": {
                 "adminUserEnabled": false,
@@ -131,6 +147,46 @@
                     "repositories/*/content/read",
                     "repositories/*/content/write"
                 ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints",
+            "apiVersion": "2021-05-01",
+            "name": "[concat(parameters('containerregistryname'), '-pe')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.ContainerRegistry/registries', parameters('containerregistryname'))]"
+            ],
+            "properties": {
+                "subnet": {
+                    "id": "[concat(parameters('vnetName'), '/subnets/', parameters('subnetName'))]"
+                },
+                "privateLinkServiceConnections": [
+                    {
+                        "name": "[concat(parameters('containerregistryname'), '-pe-connection')]",
+                        "properties": {
+                            "privateLinkServiceId": "[resourceId('Microsoft.ContainerRegistry/registries', parameters('containerregistryname'))]",
+                            "groupIds": [
+                                "registry"
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
+            "apiVersion": "2018-09-01",
+            "name": "[concat(parameters('privateDnsZoneName'), '/', parameters('containerregistryname'), '-vnet-link')]",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateEndpoints', concat(parameters('containerregistryname'), '-pe'))]"
+            ],
+            "properties": {
+                "virtualNetwork": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName'))]"
+                },
+                "registrationEnabled": false
             }
         }
     ]
