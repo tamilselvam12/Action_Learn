@@ -1,0 +1,19 @@
+name: Demo
+
+on:
+  push:
+    branches:
+      - none
+  workflow_dispatch:
+
+jobs:
+  Container_Registry:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Demo
+      run: |
+        echo "demo"
